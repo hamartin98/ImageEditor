@@ -15,11 +15,7 @@ namespace ImageEditor
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Bitmap originalImage;
-        private Bitmap resultImage;
-
-        private string path;
-
+        private string originPath = null;
         private int width;
         private int height;
 
@@ -70,17 +66,16 @@ namespace ImageEditor
                 string fileName = fileDialog.FileName;
 
                 // Show the opened image on the ui
-                imageContainer.Source = new BitmapImage(new Uri(fileName));
+                BitmapImage image = new BitmapImage(new Uri(fileName));
 
-                // Store the image as a Bitmap to manipulate it
-                originalImage = new Bitmap(fileName);
-                resultImage = new Bitmap(fileName);
+                imageContainer.Source = image;
+                originPath = fileName;
+                tbOriginPath.Text = originPath;
 
-                path = fileName;
-                tbOriginPath.Text = path;
+                width = image.PixelWidth;
+                height = image.PixelHeight;
 
-                width = originalImage.Width;
-                height = originalImage.Height;
+                MessageBox.Show($"{width} x {height}");
             }
         }
 
@@ -89,12 +84,13 @@ namespace ImageEditor
         private void ConvertToAscii()
         {
             // Do nothing if there is no image opened
-            if (originalImage == null)
+            if (originPath == null)
             {
                 return;
             }
 
             using (StreamWriter writer = new StreamWriter("result.txt"))
+            using (Bitmap image = new Bitmap(originPath))
             {
                 const string chars = " .:-=+*#%@";
                 Color color;
@@ -106,7 +102,7 @@ namespace ImageEditor
                 {
                     for (int xIdx = 0; xIdx < width; xIdx++)
                     {
-                        color = originalImage.GetPixel(xIdx, yIdx);
+                        color = image.GetPixel(xIdx, yIdx);
                         brightness = GetBrightness(color);
                         charIdx = brightness / 255 * (chars.Length - 1);
                         pixelChar = chars[(int)Math.Round(charIdx)];
@@ -146,62 +142,73 @@ namespace ImageEditor
         // Pixelize the image by averaging the color of the pixels in the given radius
         private void PixelizeAvg(int radius = 10)
         {
-            if(originalImage == null)
+            if(originPath == null)
             {
                 return;
             }
 
-            for(int yIdx = 0; yIdx < height; yIdx += radius)
+            using (Bitmap image = new Bitmap(originPath))
+            using (Bitmap result = new Bitmap(originPath))
             {
-                for(int xIdx = 0; xIdx < width; xIdx += radius)
+                for (int yIdx = 0; yIdx < height; yIdx += radius)
                 {
-                    Color avgColor = GetAvgColor(xIdx, yIdx, radius);
-
-                    for (int offsetX = 0; offsetX < radius; offsetX++)
+                    for (int xIdx = 0; xIdx < width; xIdx += radius)
                     {
-                        for (int offSetY = 0; offSetY < radius; offSetY++)
+                        Color avgColor = GetAvgColor(xIdx, yIdx, radius);
+
+                        for (int offsetX = 0; offsetX < radius; offsetX++)
                         {
-                            if (xIdx + offsetX < width && yIdx + offSetY < height)
+                            for (int offSetY = 0; offSetY < radius; offSetY++)
                             {
-                                resultImage.SetPixel(xIdx + offsetX, yIdx + offSetY, avgColor);
+                                if (xIdx + offsetX < width && yIdx + offSetY < height)
+                                {
+                                    result.SetPixel(xIdx + offsetX, yIdx + offSetY, avgColor);
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            resultContainer.Source = BitmapToImageSource(resultImage);
+                resultContainer.Source = BitmapToImageSource(result);
+            }
         }
 
 
         // Pixelization by using the color of the pixel from the middle of the radius
         private void PixelizeCenter(int radius = 15)
         {
-            if (originalImage == null)
+            if (originPath == null)
             {
                 return;
             }
 
-            for (int yIdx = 0; yIdx < height; yIdx += radius)
+            using(Bitmap image = new Bitmap(originPath))
+            using(Bitmap result = new Bitmap(originPath))
             {
-                for (int xIdx = 0; xIdx < width; xIdx += radius)
+                for (int yIdx = 0; yIdx < height; yIdx += radius)
                 {
-                    Color centerColor = originalImage.GetPixel(xIdx + radius / 2, yIdx + radius / 2);
-
-                    for (int offsetX = 0; offsetX < radius; offsetX++)
+                    for (int xIdx = 0; xIdx < width; xIdx += radius)
                     {
-                        for (int offSetY = 0; offSetY < radius; offSetY++)
+                        if(xIdx + radius / 2 < width && yIdx + radius / 2 < height)
                         {
-                            if (xIdx + offsetX < width && yIdx + offSetY < height)
+                            Color centerColor = image.GetPixel(xIdx + radius / 2, yIdx + radius / 2);
+
+                            for (int offsetX = 0; offsetX < radius; offsetX++)
                             {
-                                resultImage.SetPixel(xIdx + offsetX, yIdx + offSetY, centerColor);
+                                for (int offSetY = 0; offSetY < radius; offSetY++)
+                                {
+                                    if (xIdx + offsetX < width && yIdx + offSetY < height)
+                                    {
+                                        result.SetPixel(xIdx + offsetX, yIdx + offSetY, centerColor);
+                                    }
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            resultContainer.Source = BitmapToImageSource(resultImage);
+                resultContainer.Source = BitmapToImageSource(result);
+            }
         }
 
         // Returns the average color from the radius of the given pixel
@@ -213,17 +220,20 @@ namespace ImageEditor
             int count = 0;
             Color currColor;
 
-            for(int yIdx = startY; yIdx < startY + radius; yIdx++)
+            using(Bitmap image = new Bitmap(originPath))
             {
-                for(int xIdx = startX; xIdx < startX + radius; xIdx++)
+                for (int yIdx = startY; yIdx < startY + radius; yIdx++)
                 {
-                    if (xIdx < originalImage.Width && yIdx < originalImage.Height)
+                    for (int xIdx = startX; xIdx < startX + radius; xIdx++)
                     {
-                        currColor = originalImage.GetPixel(xIdx, yIdx);
-                        rSum += currColor.R;
-                        gSum += currColor.G;
-                        bSum += currColor.B;
-                        count++;
+                        if (xIdx < image.Width && yIdx < image.Height)
+                        {
+                            currColor = image.GetPixel(xIdx, yIdx);
+                            rSum += currColor.R;
+                            gSum += currColor.G;
+                            bSum += currColor.B;
+                            count++;
+                        }
                     }
                 }
             }
@@ -268,12 +278,12 @@ namespace ImageEditor
         // For now only works with jpeg files
         private void CompressImage(int quality = 40)
         {
-            if(path == null)
+            if(originPath == null)
             {
                 return;
             }
 
-            using(Bitmap image = new Bitmap(path))
+            using(Bitmap image = new Bitmap(originPath))
             {
                 ImageCodecInfo encoder = GetEncoder(ImageFormat.Jpeg);
                 Encoder qualityEncoder = Encoder.Quality;

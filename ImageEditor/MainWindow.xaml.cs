@@ -2,7 +2,9 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Media.Imaging;
 
@@ -15,6 +17,9 @@ namespace ImageEditor
     {
         private Bitmap originalImage;
         private Bitmap resultImage;
+
+        private int width;
+        private int height;
 
         public MainWindow()
         {
@@ -63,6 +68,9 @@ namespace ImageEditor
                 // Store the image as a Bitmap to manipulate it
                 originalImage = new Bitmap(fileName);
                 resultImage = new Bitmap(fileName);
+
+                width = originalImage.Width;
+                height = originalImage.Height;
             }
         }
 
@@ -84,9 +92,9 @@ namespace ImageEditor
                 double charIdx;
                 char pixelChar;
 
-                for (int yIdx = 0; yIdx < originalImage.Height; yIdx++)
+                for (int yIdx = 0; yIdx < height; yIdx++)
                 {
-                    for (int xIdx = 0; xIdx < originalImage.Width; xIdx++)
+                    for (int xIdx = 0; xIdx < width; xIdx++)
                     {
                         color = originalImage.GetPixel(xIdx, yIdx);
                         brightness = GetBrightness(color);
@@ -133,9 +141,9 @@ namespace ImageEditor
                 return;
             }
 
-            for(int yIdx = 0; yIdx < originalImage.Height; yIdx += radius)
+            for(int yIdx = 0; yIdx < height; yIdx += radius)
             {
-                for(int xIdx = 0; xIdx < originalImage.Width; xIdx += radius)
+                for(int xIdx = 0; xIdx < width; xIdx += radius)
                 {
                     Color avgColor = GetAvgColor(xIdx, yIdx, radius);
 
@@ -143,7 +151,7 @@ namespace ImageEditor
                     {
                         for (int offSetY = 0; offSetY < radius; offSetY++)
                         {
-                            if (xIdx + offsetX < originalImage.Width && yIdx + offSetY < originalImage.Height)
+                            if (xIdx + offsetX < width && yIdx + offSetY < height)
                             {
                                 resultImage.SetPixel(xIdx + offsetX, yIdx + offSetY, avgColor);
                             }
@@ -164,9 +172,9 @@ namespace ImageEditor
                 return;
             }
 
-            for (int yIdx = 0; yIdx < originalImage.Height; yIdx += radius)
+            for (int yIdx = 0; yIdx < height; yIdx += radius)
             {
-                for (int xIdx = 0; xIdx < originalImage.Width; xIdx += radius)
+                for (int xIdx = 0; xIdx < width; xIdx += radius)
                 {
                     Color centerColor = originalImage.GetPixel(xIdx + radius / 2, yIdx + radius / 2);
 
@@ -174,7 +182,7 @@ namespace ImageEditor
                     {
                         for (int offSetY = 0; offSetY < radius; offSetY++)
                         {
-                            if (xIdx + offsetX < originalImage.Width && yIdx + offSetY < originalImage.Height)
+                            if (xIdx + offsetX < width && yIdx + offSetY < height)
                             {
                                 resultImage.SetPixel(xIdx + offsetX, yIdx + offSetY, centerColor);
                             }

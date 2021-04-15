@@ -18,6 +18,8 @@ namespace ImageEditor
         private Bitmap originalImage;
         private Bitmap resultImage;
 
+        private string path;
+
         private int width;
         private int height;
 
@@ -46,6 +48,11 @@ namespace ImageEditor
             PixelizeCenter();
         }
 
+        private void btnCompress_Click(object sender, RoutedEventArgs e)
+        {
+            CompressImage();
+        }
+
         // Open an image from the computer, then show it on the UI
         private void OpenImage()
         {
@@ -68,6 +75,9 @@ namespace ImageEditor
                 // Store the image as a Bitmap to manipulate it
                 originalImage = new Bitmap(fileName);
                 resultImage = new Bitmap(fileName);
+
+                path = fileName;
+                tbOriginPath.Text = path;
 
                 width = originalImage.Width;
                 height = originalImage.Height;
@@ -235,6 +245,55 @@ namespace ImageEditor
                 bitmapimage.EndInit();
 
                 return bitmapimage;
+            }
+        }
+
+        // Return the correct codec info 
+        private ImageCodecInfo GetEncoder(ImageFormat format)
+        {
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
+            
+            foreach(ImageCodecInfo codec in codecs)
+            {
+                if(codec.FormatID == format.Guid)
+                {
+                    return codec;
+                }
+            }
+
+            return null;
+        }
+
+        // Compress the image with the given quality
+        // For now only works with jpeg files
+        private void CompressImage(int quality = 40)
+        {
+            if(path == null)
+            {
+                return;
+            }
+
+            using(Bitmap image = new Bitmap(path))
+            {
+                ImageCodecInfo encoder = GetEncoder(ImageFormat.Jpeg);
+                Encoder qualityEncoder = Encoder.Quality;
+                EncoderParameters myEncoderParameters = new EncoderParameters(1);
+                EncoderParameter myEncoderParameter = new EncoderParameter(qualityEncoder, quality);
+                myEncoderParameters.Param[0] = myEncoderParameter;
+
+                BitmapImage img = BitmapToImageSource(image);
+                resultContainer.Source = img;
+
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.DefaultExt = "jpg";
+                saveFileDialog.Filter = "Jpg files|JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|";
+                saveFileDialog.AddExtension = true;
+
+                if(saveFileDialog.ShowDialog() == true)
+                {
+                    string destPath = saveFileDialog.FileName;
+                    image.Save(destPath, encoder, myEncoderParameters);
+                }
             }
         }
     }

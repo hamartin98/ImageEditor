@@ -40,6 +40,11 @@
                     Click="btnPixelize2_Click"
                     Margin="5"/>
 
+            <Button x:Name="btnCompress"
+                    Content="Compress then save image"
+                    Click="btnCompress_Click"
+                    Margin="5"/>
+
         </StackPanel>
 
         <Image Grid.Column="1"
@@ -49,6 +54,14 @@
         <Image Grid.Column="2"
                Margin="10"
                x:Name="resultContainer"/>
+
+        <StackPanel Grid.Row="1"
+                    Grid.Column="1">
+        
+            <TextBlock
+                   x:Name="tbOriginPath"/>
+
+        </StackPanel>
 
     </Grid>
 </Window>

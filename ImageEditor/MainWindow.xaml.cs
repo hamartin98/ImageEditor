@@ -14,6 +14,7 @@ namespace ImageEditor
     public partial class MainWindow : Window
     {
         private Bitmap originalImage;
+        private Bitmap resultImage;
 
         public MainWindow()
         {
@@ -28,6 +29,16 @@ namespace ImageEditor
         private void btnConvertToAscii_Click(object sender, RoutedEventArgs e)
         {
             ConvertToAscii();
+        }
+
+        private void btnPixelize_Click(object sender, RoutedEventArgs e)
+        {
+            PixelizeAvg();
+        }
+
+        private void btnPixelize2_Click(object sender, RoutedEventArgs e)
+        {
+            PixelizeCenter();
         }
 
         // Open an image from the computer, then show it on the UI
@@ -51,6 +62,7 @@ namespace ImageEditor
 
                 // Store the image as a Bitmap to manipulate it
                 originalImage = new Bitmap(fileName);
+                resultImage = new Bitmap(fileName);
             }
         }
 
@@ -111,6 +123,111 @@ namespace ImageEditor
             };
 
             Process.Start(process);
+        }
+
+        // Pixelize the image by averaging the color of the pixels in the given radius
+        private void PixelizeAvg(int radius = 10)
+        {
+            if(originalImage == null)
+            {
+                return;
+            }
+
+            for(int yIdx = 0; yIdx < originalImage.Height; yIdx += radius)
+            {
+                for(int xIdx = 0; xIdx < originalImage.Width; xIdx += radius)
+                {
+                    Color avgColor = GetAvgColor(xIdx, yIdx, radius);
+
+                    for (int offsetX = 0; offsetX < radius; offsetX++)
+                    {
+                        for (int offSetY = 0; offSetY < radius; offSetY++)
+                        {
+                            if (xIdx + offsetX < originalImage.Width && yIdx + offSetY < originalImage.Height)
+                            {
+                                resultImage.SetPixel(xIdx + offsetX, yIdx + offSetY, avgColor);
+                            }
+                        }
+                    }
+                }
+            }
+
+            resultContainer.Source = BitmapToImageSource(resultImage);
+        }
+
+
+        // Pixelization by using the color of the pixel from the middle of the radius
+        private void PixelizeCenter(int radius = 15)
+        {
+            if (originalImage == null)
+            {
+                return;
+            }
+
+            for (int yIdx = 0; yIdx < originalImage.Height; yIdx += radius)
+            {
+                for (int xIdx = 0; xIdx < originalImage.Width; xIdx += radius)
+                {
+                    Color centerColor = originalImage.GetPixel(xIdx + radius / 2, yIdx + radius / 2);
+
+                    for (int offsetX = 0; offsetX < radius; offsetX++)
+                    {
+                        for (int offSetY = 0; offSetY < radius; offSetY++)
+                        {
+                            if (xIdx + offsetX < originalImage.Width && yIdx + offSetY < originalImage.Height)
+                            {
+                                resultImage.SetPixel(xIdx + offsetX, yIdx + offSetY, centerColor);
+                            }
+                        }
+                    }
+                }
+            }
+
+            resultContainer.Source = BitmapToImageSource(resultImage);
+        }
+
+        // Returns the average color from the radius of the given pixel
+        private Color GetAvgColor(int startX, int startY, int radius)
+        {
+            int rSum = 0;
+            int gSum = 0;
+            int bSum = 0;
+            int count = 0;
+            Color currColor;
+
+            for(int yIdx = startY; yIdx < startY + radius; yIdx++)
+            {
+                for(int xIdx = startX; xIdx < startX + radius; xIdx++)
+                {
+                    if (xIdx < originalImage.Width && yIdx < originalImage.Height)
+                    {
+                        currColor = originalImage.GetPixel(xIdx, yIdx);
+                        rSum += currColor.R;
+                        gSum += currColor.G;
+                        bSum += currColor.B;
+                        count++;
+                    }
+                }
+            }
+
+            return Color.FromArgb(rSum / count, gSum / count, bSum / count);
+        }
+
+        // Convert Bitmap to ImageSource to display it in a Image cotrol
+        private BitmapImage BitmapToImageSource(Bitmap bitmap)
+        {
+            using (MemoryStream memory = new MemoryStream())
+            {
+                bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
+                memory.Position = 0;
+                BitmapImage bitmapimage = new BitmapImage();
+                bitmapimage.BeginInit();
+                bitmapimage.StreamSource = memory;
+                bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapimage.EndInit();
+
+                return bitmapimage;
+            }
         }
     }
 }

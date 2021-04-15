@@ -23,7 +23,12 @@
                     Click="btnOpenImage_Click"
                     Content="Open Image"
                     Margin="5"/>
-            
+
+            <Button x:Name="btnConvertToAscii"
+                    Content="Convert to Ascii characters"
+                    Click="btnConvertToAscii_Click"
+                    Margin="5"/>
+
         </StackPanel>
 
         <Image Grid.Column="1"

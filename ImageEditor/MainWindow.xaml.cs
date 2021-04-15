@@ -58,14 +58,20 @@ namespace ImageEditor
         // Write the result into a file the open the file
         private void ConvertToAscii()
         {
-            const string chars = " .:-=+*#%@";
-            Color color;
-            double brightness;
-            double charIdx;
-            char pixelChar;
+            // Do nothing if there is no image opened
+            if (originalImage == null)
+            {
+                return;
+            }
 
             using (StreamWriter writer = new StreamWriter("result.txt"))
             {
+                const string chars = " .:-=+*#%@";
+                Color color;
+                double brightness;
+                double charIdx;
+                char pixelChar;
+
                 for (int yIdx = 0; yIdx < originalImage.Height; yIdx++)
                 {
                     for (int xIdx = 0; xIdx < originalImage.Width; xIdx++)
@@ -86,7 +92,11 @@ namespace ImageEditor
         // Returns the brightness of the given color
         private double GetBrightness(Color color)
         {
-            return Math.Sqrt(color.R * color.R * 0.241 + color.G * color.G * 0.691 + color.B * color.B * 0.068);
+            double red = Math.Pow(color.R, 2) * 0.241;
+            double green = Math.Pow(color.G, 2) * 0.691;
+            double blue = Math.Pow(color.B, 2) * 0.068;
+
+            return Math.Sqrt(red + green + blue);
         }
 
         // Open the txt file from the given path with the default text editor

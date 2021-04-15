@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Win32;
+using System;
+using System.Drawing;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ImageEditor
 {
@@ -23,6 +14,29 @@ namespace ImageEditor
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void btnOpenImage_Click(object sender, RoutedEventArgs e)
+        {
+            OpenImage();
+        }
+
+        // Open an image from the computer, then show it on the UI
+        private void OpenImage()
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+
+            fileDialog.Title = "Open an image";
+            fileDialog.Filter = "Image files|*.jpg;*.jpeg;*.png|" +
+                                "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
+                                "Portable Network Graphic (*.png)|*.png";
+
+            fileDialog.RestoreDirectory = true;
+
+            if(fileDialog.ShowDialog() == true)
+            {
+                imageContainer.Source = new BitmapImage(new Uri(fileDialog.FileName));
+            }
         }
     }
 }

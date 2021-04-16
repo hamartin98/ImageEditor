@@ -1,12 +1,16 @@
-﻿using Microsoft.Win32;
+﻿using Emgu.CV;
+using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using Emgu.CV.CvEnum;
+using Emgu.CV.Structure;
+using System.Runtime.InteropServices;
+using Emgu.CV;
 
 namespace ImageEditor
 {
@@ -18,6 +22,9 @@ namespace ImageEditor
         private string originPath = null;
         private int width;
         private int height;
+
+        [DllImport("gdi32")]
+        private static extern int DeleteObject(IntPtr o);
 
         public MainWindow()
         {
@@ -49,6 +56,11 @@ namespace ImageEditor
             CompressImage();
         }
 
+        private void btnTest_Click(object sender, RoutedEventArgs e)
+        {
+            PixelizeEmgu();
+        }
+
         // Open an image from the computer, then show it on the UI
         private void OpenImage()
         {
@@ -70,12 +82,11 @@ namespace ImageEditor
 
                 imageContainer.Source = image;
                 originPath = fileName;
-                tbOriginPath.Text = originPath;
-
                 width = image.PixelWidth;
                 height = image.PixelHeight;
 
-                MessageBox.Show($"{width} x {height}");
+                tbOriginPath.Text = originPath;
+                tbResolution.Text = $"{width} x {height}";
             }
         }
 
@@ -142,10 +153,13 @@ namespace ImageEditor
         // Pixelize the image by averaging the color of the pixels in the given radius
         private void PixelizeAvg(int radius = 10)
         {
-            if(originPath == null)
+            if (originPath == null)
             {
                 return;
             }
+
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
 
             using (Bitmap image = new Bitmap(originPath))
             using (Bitmap result = new Bitmap(originPath))
@@ -171,6 +185,9 @@ namespace ImageEditor
 
                 resultContainer.Source = BitmapToImageSource(result);
             }
+
+            watch.Stop();
+            MessageBox.Show($"Elapsed time: {watch.ElapsedMilliseconds} ms");
         }
 
 
@@ -182,14 +199,17 @@ namespace ImageEditor
                 return;
             }
 
-            using(Bitmap image = new Bitmap(originPath))
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+
+            using (Bitmap image = new Bitmap(originPath))
             using(Bitmap result = new Bitmap(originPath))
             {
                 for (int yIdx = 0; yIdx < height; yIdx += radius)
                 {
                     for (int xIdx = 0; xIdx < width; xIdx += radius)
                     {
-                        if(xIdx + radius / 2 < width && yIdx + radius / 2 < height)
+                        if (xIdx + radius / 2 < width && yIdx + radius / 2 < height)
                         {
                             Color centerColor = image.GetPixel(xIdx + radius / 2, yIdx + radius / 2);
 
@@ -209,6 +229,9 @@ namespace ImageEditor
 
                 resultContainer.Source = BitmapToImageSource(result);
             }
+
+            watch.Stop();
+            MessageBox.Show($"Elapsed time: {watch.ElapsedMilliseconds} ms");
         }
 
         // Returns the average color from the radius of the given pixel
@@ -246,7 +269,7 @@ namespace ImageEditor
         {
             using (MemoryStream memory = new MemoryStream())
             {
-                bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
+                bitmap.Save(memory, ImageFormat.Bmp);
                 memory.Position = 0;
                 BitmapImage bitmapimage = new BitmapImage();
                 bitmapimage.BeginInit();
@@ -305,6 +328,67 @@ namespace ImageEditor
                     image.Save(destPath, encoder, myEncoderParameters);
                 }
             }
+        }
+
+        // Pixelize image with Emgu library to faster processing
+        private void PixelizeEmgu(int radius = 4)
+        {
+            if (originPath == null)
+            {
+                return;
+            }
+
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+
+            using (Image<Bgr, byte> image = new Image<Bgr, byte>(originPath))
+            {
+                int[] sums = new int[3] { 0, 0, 0 };
+                int count = radius * radius;
+
+                for (int yIdx = 0; yIdx < height; yIdx += radius)
+                {
+                    for (int xIdx = 0; xIdx < width; xIdx += radius)
+                    {
+                        sums = new int[3] { 0, 0, 0 };
+
+                        for (int xOff = xIdx; xOff < xIdx + radius; xOff++)
+                        {
+                            for (int yOff = yIdx; yOff < yIdx + radius; yOff++)
+                            {
+                                if (xOff < width && yOff < height)
+                                {
+                                    Bgr color = image[yOff, xOff];
+                                    sums[0] += (int)color.Blue;
+                                    sums[1] += (int)color.Green;
+                                    sums[2] += (int)color.Red;
+                                }
+                            }
+                        }
+
+                        Bgr avgColor = new Bgr(sums[0] / count, sums[1] / count, sums[2] / count);
+
+                        for (int xOff = xIdx; xOff < xIdx + radius; xOff++)
+                        {
+                            for (int yOff = yIdx; yOff < yIdx + radius; yOff++)
+                            {
+                                if (xOff < width && yOff < height)
+                                {
+                                    image[yOff, xOff] = avgColor;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                using (Bitmap bmp = image.ToBitmap())
+                {
+                    resultContainer.Source = BitmapToImageSource(bmp);
+                }
+            }
+
+            watch.Stop();
+            MessageBox.Show($"Elapsed time: {watch.ElapsedMilliseconds} ms");
         }
     }
 }

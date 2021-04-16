@@ -45,6 +45,11 @@
                     Click="btnCompress_Click"
                     Margin="5"/>
 
+            <Button x:Name="btnTest"
+                    Content="Test button"
+                    Click="btnTest_Click"
+                    Margin="5"/>
+
         </StackPanel>
 
         <Image Grid.Column="1"
@@ -59,7 +64,10 @@
                     Grid.Column="1">
         
             <TextBlock
-                   x:Name="tbOriginPath"/>
+                   x:Name= "tbOriginPath"/>
+
+            <TextBlock
+                   x:Name= "tbResolution"/>
 
         </StackPanel>
 

@@ -23,9 +23,6 @@ namespace ImageEditor
         private int width;
         private int height;
 
-        [DllImport("gdi32")]
-        private static extern int DeleteObject(IntPtr o);
-
         public MainWindow()
         {
             InitializeComponent();
@@ -61,6 +58,11 @@ namespace ImageEditor
             PixelizeEmgu();
         }
 
+        private void btnBlur_Click(object sender, RoutedEventArgs e)
+        {
+            Blur();
+        }
+
         // Open an image from the computer, then show it on the UI
         private void OpenImage()
         {
@@ -76,17 +78,7 @@ namespace ImageEditor
             if(fileDialog.ShowDialog() == true)
             {
                 string fileName = fileDialog.FileName;
-
-                // Show the opened image on the ui
-                BitmapImage image = new BitmapImage(new Uri(fileName));
-
-                imageContainer.Source = image;
-                originPath = fileName;
-                width = image.PixelWidth;
-                height = image.PixelHeight;
-
-                tbOriginPath.Text = originPath;
-                tbResolution.Text = $"{width} x {height}";
+                LoadImage(fileName);
             }
         }
 
@@ -358,10 +350,9 @@ namespace ImageEditor
                             {
                                 if (xOff < width && yOff < height)
                                 {
-                                    Bgr color = image[yOff, xOff];
-                                    sums[0] += (int)color.Blue;
-                                    sums[1] += (int)color.Green;
-                                    sums[2] += (int)color.Red;
+                                    sums[0] += image.Data[yOff, xOff, 0];
+                                    sums[1] += image.Data[yOff, xOff, 1];
+                                    sums[2] += image.Data[yOff, xOff, 2];
                                 }
                             }
                         }
@@ -389,6 +380,62 @@ namespace ImageEditor
 
             watch.Stop();
             MessageBox.Show($"Elapsed time: {watch.ElapsedMilliseconds} ms");
+        }
+
+        // Sets the result image to the given Mat object
+        private void SetResultImage(Mat image)
+        {
+            using(Bitmap bmp = image.ToBitmap())
+            {
+                resultContainer.Source = BitmapToImageSource(bmp);
+            }
+        }
+
+        // Blur the image
+        private void Blur()
+        {
+            if(originPath == null)
+            {
+                return;
+            }
+
+            using (Mat image = new Mat(originPath))
+            using (Mat result = new Mat(originPath))
+            {
+                CvInvoke.Blur(image, result, new System.Drawing.Size(10, 10), new System.Drawing.Point(-1, -1));
+
+                SetResultImage(result);
+            }
+        }
+
+        // Load the given image into the imageContainer
+        private void LoadImage(string path)
+        {
+            if(path == null)
+            {
+                return;
+            }
+
+            BitmapImage image = new BitmapImage(new Uri(path));
+
+            imageContainer.Source = image;
+            originPath = path;
+            width = image.PixelWidth;
+            height = image.PixelHeight;
+
+            tbOriginPath.Text = originPath;
+            tbResolution.Text = $"{width} x {height}";
+        }
+
+        // Called when files get dropped on the window
+        // Load the first file into the image container
+        private void Window_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                LoadImage(files[0]);
+            }
         }
     }
 }

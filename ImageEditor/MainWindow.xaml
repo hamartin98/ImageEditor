@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ImageEditor"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="1200">
+        Title="MainWindow" Height="450" Width="1200"
+        AllowDrop="True"
+        Drop="Window_Drop">
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -48,6 +51,11 @@
             <Button x:Name="btnTest"
                     Content="Test button"
                     Click="btnTest_Click"
+                    Margin="5"/>
+
+            <Button x:Name="btnBlur"
+                    Content="Blur image"
+                    Click="btnBlur_Click"
                     Margin="5"/>
 
         </StackPanel>

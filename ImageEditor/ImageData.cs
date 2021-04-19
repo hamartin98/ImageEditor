@@ -1,6 +1,8 @@
 ﻿using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Media.Imaging;
@@ -21,18 +23,36 @@ namespace ImageEditor
         // Return the dimensions of the image as a string
         public string ResolutionStr => $"{Width} x {Height} ";
 
+        // Store the format of the image as a string e.g. jpg
+        public string Format { get; private set; }
+
+        // Store format - ImwriteFlags pairs to save images in the correct format
+        private Dictionary<string, ImwriteFlags> saveFlags;
+
         // Initialize Image
         public ImageData(string path)
         {
+            InitSaveFlags();
             SetData(path);
         }
 
+        // Load image data from the given path
         private void SetData(string path)
         {
             Path = path;
-            Data = new Mat(path);
+            Data = CvInvoke.Imread(path);
             Width = Data.Width;
             Height = Data.Height;
+            ExtractFormat();
+        }
+
+
+        // Initialize saveFlag dictionary
+        private void InitSaveFlags()
+        {
+            saveFlags = new Dictionary<string, ImwriteFlags>();
+            saveFlags.Add("jpg", ImwriteFlags.JpegQuality); // 1 - 100, 1 == full compression
+            saveFlags.Add("png", ImwriteFlags.PngCompression); // 0 - 9, 9 == full compression
         }
 
         // Return as an Image to manipilate
@@ -54,9 +74,17 @@ namespace ImageEditor
         }
 
         // Save the image to the specified location
-        public void Save(string path)
+        public void Save(string path, int quality = 100)
         {
-            Data.Save(path);
+            KeyValuePair<ImwriteFlags, int> flag =  new KeyValuePair<ImwriteFlags, int>(saveFlags[Format], quality);
+            CvInvoke.Imwrite(path, Data, flag);
+        }
+
+        // Extract the format of the image from the path
+        private void ExtractFormat()
+        {
+            int idx = Path.LastIndexOf('.');
+            Format =  Path.Substring(idx + 1);
         }
     }
 }

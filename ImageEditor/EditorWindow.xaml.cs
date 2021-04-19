@@ -60,10 +60,13 @@ namespace ImageEditor
         private void SaveImage()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.DefaultExt = "jpg";
-            saveFileDialog.Filter = "Jpg files|JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|";
+            saveFileDialog.DefaultExt = imageData.Format;
             saveFileDialog.AddExtension = true;
 
+            saveFileDialog.Filter = "Image files|*.jpg;*.jpeg;*.png|" +
+                                    "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
+                                    "Portable Network Graphic (*.png)|*.png";
+            
             if (saveFileDialog.ShowDialog() == true)
             {
                 string destPath = saveFileDialog.FileName;

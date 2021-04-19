@@ -4,7 +4,7 @@ using Emgu.CV.Structure;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace ImageEditor
@@ -51,20 +51,21 @@ namespace ImageEditor
         private void InitSaveFlags()
         {
             saveFlags = new Dictionary<string, ImwriteFlags>();
+
             saveFlags.Add("jpg", ImwriteFlags.JpegQuality); // 1 - 100, 1 == full compression
             saveFlags.Add("png", ImwriteFlags.PngCompression); // 0 - 9, 9 == full compression
         }
 
         // Return as an Image to manipilate
-        public Image<Bgr, byte> ToImage()
+        public Image<Bgra, byte> ToImage()
         {
-            throw new NotImplementedException();
+            return Data.ToImage<Bgra, byte>();
         }
 
         // Return the image as a bitmap
         public Bitmap ToBitmap()
         {
-            throw new NotImplementedException();
+            return Data.ToBitmap();
         }
 
         // Return as a BitmapImage to display the image in an Image control
@@ -76,6 +77,7 @@ namespace ImageEditor
         // Save the image to the specified location
         public void Save(string path, int quality = 100)
         {
+            QualityMapper(ref quality);
             KeyValuePair<ImwriteFlags, int> flag =  new KeyValuePair<ImwriteFlags, int>(saveFlags[Format], quality);
             CvInvoke.Imwrite(path, Data, flag);
         }
@@ -85,6 +87,16 @@ namespace ImageEditor
         {
             int idx = Path.LastIndexOf('.');
             Format =  Path.Substring(idx + 1);
+        }
+
+        // Return the quality value based on the file format
+        private void QualityMapper(ref int quality)
+        {
+            if (Format == "png") // map (1, 100) to (9, 0)
+            {
+                int value = (100 - quality) / 11;
+                quality = Math.Max(0, value); // don't go below zero
+            }
         }
     }
 }

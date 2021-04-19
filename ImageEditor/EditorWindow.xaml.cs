@@ -19,6 +19,10 @@ namespace ImageEditor
     public partial class EditorWindow : Window
     {
         private ImageData imageData = null;
+        private int saveQuality = 100;
+        private readonly string fileDialogFilter = "Image files|*.jpg;*.jpeg;*.png|" +
+                                "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
+                                "Portable Network Graphic (*.png)|*.png";
 
         public EditorWindow()
         {
@@ -38,18 +42,16 @@ namespace ImageEditor
         // Open an image from the computer and set the data of the imageData property
         private void OpenImage()
         {
-            OpenFileDialog fileDialog = new OpenFileDialog();
+            OpenFileDialog openFileDialog = new OpenFileDialog();
 
-            fileDialog.Title = "Open images";
-            fileDialog.Filter = "Image files|*.jpg;*.jpeg;*.png|" +
-                                "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
-                                "Portable Network Graphic (*.png)|*.png";
+            openFileDialog.Title = "Open image";
+            openFileDialog.Filter = fileDialogFilter;
 
-            fileDialog.RestoreDirectory = true;
+            openFileDialog.RestoreDirectory = true;
 
-            if (fileDialog.ShowDialog() == true)
+            if (openFileDialog.ShowDialog() == true)
             {
-                string fileName = fileDialog.FileName;
+                string fileName = openFileDialog.FileName;
                 imageData = new ImageData(fileName);
 
                 UpdateImageContainer();
@@ -63,14 +65,13 @@ namespace ImageEditor
             saveFileDialog.DefaultExt = imageData.Format;
             saveFileDialog.AddExtension = true;
 
-            saveFileDialog.Filter = "Image files|*.jpg;*.jpeg;*.png|" +
-                                    "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
-                                    "Portable Network Graphic (*.png)|*.png";
+            saveFileDialog.Title = "Save image";
+            saveFileDialog.Filter = fileDialogFilter;
             
             if (saveFileDialog.ShowDialog() == true)
             {
                 string destPath = saveFileDialog.FileName;
-                imageData.Save(destPath);
+                imageData.Save(destPath, saveQuality);
             }
         }
 
@@ -88,6 +89,11 @@ namespace ImageEditor
             imgMain.Source = bitmapImage;
             DisplayInfo();
             
+        }
+
+        private void sldQuality_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            saveQuality = (int)sldQuality.Value;
         }
     }
 }

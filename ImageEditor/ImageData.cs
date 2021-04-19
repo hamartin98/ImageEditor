@@ -4,7 +4,6 @@ using Emgu.CV.Structure;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace ImageEditor
@@ -29,17 +28,20 @@ namespace ImageEditor
         // Store format - ImwriteFlags pairs to save images in the correct format
         private Dictionary<string, ImwriteFlags> saveFlags;
 
-        // Initialize Image
-        public ImageData(string path)
+        public ImageData()
         {
             InitSaveFlags();
-            SetData(path);
         }
 
         // Load image data from the given path
-        private void SetData(string path)
+        public void SetData(string path)
         {
             Path = path;
+            if (Data != null)
+            {
+                Data.Dispose();
+            }
+            GC.Collect();
             Data = CvInvoke.Imread(path);
             Width = Data.Width;
             Height = Data.Height;
@@ -97,6 +99,12 @@ namespace ImageEditor
                 int value = (100 - quality) / 11;
                 quality = Math.Max(0, value); // don't go below zero
             }
+        }
+
+        // Blur the image with the given radius
+        public void BlurEffect(int radius)
+        {
+            ImageEffects.BlurEffect(Data, radius);
         }
     }
 }

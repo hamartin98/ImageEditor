@@ -27,6 +27,7 @@ namespace ImageEditor
         public EditorWindow()
         {
             InitializeComponent();
+            imageData = new ImageData();
         }
 
         private void btnOpen_Click(object sender, RoutedEventArgs e)
@@ -52,7 +53,7 @@ namespace ImageEditor
             if (openFileDialog.ShowDialog() == true)
             {
                 string fileName = openFileDialog.FileName;
-                imageData = new ImageData(fileName);
+                imageData.SetData(fileName);
 
                 UpdateImageContainer();
             }
@@ -85,8 +86,7 @@ namespace ImageEditor
         // Sets the image on the UI
         private void UpdateImageContainer()
         {
-            BitmapImage bitmapImage = imageData.ToBitmapImage();
-            imgMain.Source = bitmapImage;
+            imgMain.Source = imageData.ToBitmapImage();
             DisplayInfo();
             
         }
@@ -94,6 +94,23 @@ namespace ImageEditor
         private void sldQuality_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             saveQuality = (int)sldQuality.Value;
+        }
+
+        private void sldBlur_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        {
+            int radius = (int)sldBlur.Value;
+            imageData.BlurEffect(radius);
+            UpdateImageContainer();
+        }
+
+        private void Window_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                imageData.SetData(files[0]);
+                UpdateImageContainer();
+            }
         }
     }
 }

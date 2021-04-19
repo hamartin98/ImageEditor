@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ImageEditor"
         mc:Ignorable="d"
-        Title="EditorWindow" Height="450" Width="800">
+        Title="EditorWindow" Height="450" Width="800"
+        AllowDrop="True"
+        Drop="Window_Drop">
     <Grid>
 
         <Grid.RowDefinitions>
@@ -68,7 +70,24 @@
                     
                     </StackPanel>
                 </Expander>
-            
+
+                <Expander Header="Blur options">
+                    <StackPanel>
+
+                        <TextBlock Text="Blur radius"/>
+
+                        <Slider x:Name="sldBlur"
+                            Minimum="1"
+                            Maximum="9"
+                            Margin="10"
+                            TickFrequency="2"
+                            TickPlacement="BottomRight"
+                            IsSnapToTickEnabled="True"
+                            Thumb.DragCompleted="sldBlur_DragCompleted"/>
+
+                    </StackPanel>
+                </Expander>
+
             </StackPanel>
         </Border>
 

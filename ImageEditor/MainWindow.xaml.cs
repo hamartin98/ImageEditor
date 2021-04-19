@@ -65,9 +65,7 @@ namespace ImageEditor
 
         private void btnSplash_Click(object sender, RoutedEventArgs e)
         {
-            //SplashEffect();
-            //SplashOwn();
-            SplashOwn2();
+
         }
 
         // Open an image from the computer, then show it on the UI
@@ -443,104 +441,6 @@ namespace ImageEditor
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 LoadImage(files[0]);
             }
-        }
-
-        private void SplashEffect()
-        {
-            Mat original = new Mat(originPath);
-            Mat mask = Hsv(15, 30);
-            Mat inverseMask = new Mat(originPath);
-            CvInvoke.BitwiseNot(mask, inverseMask);
-            Mat gray = new Mat(originPath);
-            Mat res = new Mat(originPath);
-            CvInvoke.CvtColor(original, gray, ColorConversion.Bgr2Gray);
-
-            Mat reg1 = new Mat(originPath);
-            Mat reg2 = new Mat(originPath);
-
-            CvInvoke.BitwiseAnd(original, original, reg1, mask);
-            CvInvoke.BitwiseAnd(gray, gray, reg2, inverseMask);
-
-            CvInvoke.Imshow("Test", reg2);
-
-            /*
-            for(int i = 0; i < 3; i++)
-            {
-                res[]
-            }*/
-
-            //CvInvoke.BitwiseOr(reg1, reg2, original);
-            //CvInvoke.BitwiseOr(reg1, reg2, original, mask);
-            //CvInvoke.Imshow("Result", original);
-        }
-
-        private void SplashOwn()
-        {
-            Mat original = new Mat(originPath);
-            Bgr filterColor = new Bgr(10, 10, 10);
-            Mat filtered = original.Clone();
-
-            for(int row = 0; row < filtered.Rows; row++)
-            {
-                for(int col = 0; col < filtered.Cols; col++)
-                {
-                    Bgr color = filtered.ToImage<Bgr, byte>()[row, col];
-                    
-                    if(color.Equals(filterColor))
-                    {
-
-                    }
-                }
-            }
-
-            CvInvoke.Imshow("filtered", filtered);
-        }
-
-        private void SplashOwn2()
-        {
-            Image<Bgr, byte> image = new Image<Bgr, byte>(originPath);
-            Bgr filterColor = new Bgr(37, 35, 219);
-            //filterColor = new Bgr(Color.White);
-            Image<Bgr, byte> filtered = image.CopyBlank();
-            Bgr black = new Bgr(Color.Black);
-
-            Bgr color = image[0, 0];
-            MessageBox.Show($"{color.Blue} {color.Green} {color.Red}");
-
-            for(int row = 0; row < image.Rows; row++)
-            {
-                for(int col = 0; col < image.Cols; col++)
-                {
-                    if(image[row, col].Equals(filterColor))
-                    {
-                        filtered[row, col] = filterColor;
-                    }
-                    else
-                    {
-                        filtered[row, col] = black;
-                    }
-                }
-            }
-
-            Mat filteredMat = filtered.Mat;
-            CvInvoke.Imshow("mat", filteredMat);
-
-            CvInvoke.Imshow("splash", filtered);
-        }
-
-        private Mat Hsv(int low, int up)
-        {
-            Mat image = new Mat(originPath);
-            Mat result = new Mat(originPath);
-
-            CvInvoke.CvtColor(image, result, ColorConversion.Bgr2Hsv);
-
-            Mat lower = new Mat(originPath);
-            Mat upper = new Mat(originPath);
-
-            CvInvoke.InRange(image, lower, upper, result);
-
-            return result;
         }
     }
 }

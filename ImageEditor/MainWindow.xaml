@@ -58,6 +58,11 @@
                     Click="btnBlur_Click"
                     Margin="5"/>
 
+            <Button x:Name="btnSplash"
+                    Content="Splash Effect"
+                    Click="btnSplash_Click"
+                    Margin="5"/>
+
         </StackPanel>
 
         <Image Grid.Column="1"

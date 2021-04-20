@@ -1,7 +1,6 @@
 ﻿using Microsoft.Win32;
 using System.Text.RegularExpressions;
 using System.Windows;
-using Emgu.CV.Structure;
 
 namespace ImageEditor
 {

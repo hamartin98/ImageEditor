@@ -1,9 +1,5 @@
-﻿using Emgu.CV;
-using Emgu.CV.Structure;
+﻿using Emgu.CV.Structure;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
 
 namespace ImageEditor
 {
@@ -28,34 +24,34 @@ namespace ImageEditor
             double greenH = green / 255.0;
             double redH = red / 255.0;
 
-            double cMin = Math.Min(blueH, Math.Min(greenH, redH));
-            double cMax = Math.Max(blueH, Math.Max(greenH, redH));
+            double min = Math.Min(blueH, Math.Min(greenH, redH));
+            double max = Math.Max(blueH, Math.Max(greenH, redH));
 
-            double delta = cMax - cMin;
+            double delta = max - min;
             double H = 0;
             double S = 0;
-            double L = (cMax - cMin) / 2.0;
+            double L = (max - min) / 2.0;
 
             if (delta > Math.Abs(0.000001))
             {
                 if (L <= 0.5)
                 {
-                    S = delta / (cMax + cMin);
+                    S = delta / (max + min);
                 }
                 else
                 {
-                    S = delta / (2 - cMax - cMin);
+                    S = delta / (2 - max - min);
                 }
 
-                double rDiff = (cMax - redH) / delta;
-                double gDiff = (cMax - greenH) / delta;
-                double bDiff = (cMax - blueH) / delta;
+                double rDiff = (max - redH) / delta;
+                double gDiff = (min - greenH) / delta;
+                double bDiff = (max - blueH) / delta;
 
-                if (redH == cMax)
+                if (redH == max)
                 {
                     H = bDiff - gDiff;
                 }
-                else if (greenH == cMax)
+                else if (greenH == max)
                 {
                     H = 2 + rDiff - bDiff;
                 }
@@ -88,6 +84,7 @@ namespace ImageEditor
             return (max - min) / 2.0;
         }
 
+        // Calculate new lightness value between the min and max interval
         public static Bgr GetEqualizedValue(double min, double max, Bgr color)
         {
             double blue = color.Blue;
@@ -95,11 +92,8 @@ namespace ImageEditor
             double red = color.Red;
 
             double oldValue = GetLightness(color);
-
             double newValue = (100 / (max - min)) * (oldValue);
-
             double diff = Math.Abs(oldValue - newValue) / 100;
-            //MessageBox.Show($"old: {GetLightness(color)}, new: {newValue}");
 
             return new Bgr(blue + blue * diff, green + green * diff, red + red * diff);
         }
@@ -111,12 +105,9 @@ namespace ImageEditor
             double red = color.Red;
 
             double oldValue = GetLightness(color);
-
             double newValue = 255 * (oldValue / minDiff);
-
             double diff = Math.Abs(oldValue - newValue) / 100;
-            //MessageBox.Show($"old: {GetLightness(color)}, new: {newValue}");
-
+            
             return new Bgr(blue + blue * diff, green + green * diff, red + red * diff);
         }
 

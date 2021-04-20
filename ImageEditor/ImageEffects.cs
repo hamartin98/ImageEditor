@@ -1,7 +1,5 @@
 ﻿using Emgu.CV;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
 using Emgu.CV.Structure;
 
@@ -59,7 +57,7 @@ namespace ImageEditor
 
                 original = image.Mat;
 
-                CvInvoke.Imshow("Shrink", image);
+                CvInvoke.Imshow("Shrinked", image);
             }
         }
 
@@ -85,7 +83,7 @@ namespace ImageEditor
 
                 original = image.Mat;
 
-                CvInvoke.Imshow("Stretch", image);
+                CvInvoke.Imshow("Stretched", image);
             }
         }
     }

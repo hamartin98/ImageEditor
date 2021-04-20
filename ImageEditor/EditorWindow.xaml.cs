@@ -31,6 +31,12 @@ namespace ImageEditor
             SaveImage();
         }
 
+        // Button to call methods
+        private void btnTest_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         // Open an image from the computer and set the data of the imageData property
         private void OpenImage()
         {

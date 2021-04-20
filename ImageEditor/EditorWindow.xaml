@@ -36,6 +36,11 @@
                     x:Name="btnSave"
                     Click="btnSave_Click"/>
 
+            <Button Content="Test"
+                    Margin="5"
+                    x:Name="btnTest"
+                    Click="btnTest_Click"/>
+
         </StackPanel>
 
         <Image Grid.Row="1"

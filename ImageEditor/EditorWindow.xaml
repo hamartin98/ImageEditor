@@ -38,8 +38,8 @@
 
         </StackPanel>
 
-        <Image Grid.Row="1" Name="imgMain">
-            
+        <Image Grid.Row="1"
+               Name="imgMain">
         </Image>
 
         <Grid Grid.Row="1"

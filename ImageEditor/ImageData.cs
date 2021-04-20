@@ -58,7 +58,7 @@ namespace ImageEditor
             saveFlags.Add("png", ImwriteFlags.PngCompression); // 0 - 9, 9 == full compression
         }
 
-        // Return as an Image to manipilate
+        // Return the Mat as an Image to manipulate it
         public Image<Bgra, byte> ToImage()
         {
             return Data.ToImage<Bgra, byte>();

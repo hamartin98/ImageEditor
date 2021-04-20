@@ -1,15 +1,6 @@
 ﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace ImageEditor
 {
@@ -103,13 +94,24 @@ namespace ImageEditor
             UpdateImageContainer();
         }
 
+        // Occurs when files are dropped on the window, only the first file and only image files are accepted
         private void Window_Drop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                imageData.SetData(files[0]);
-                UpdateImageContainer();
+                string fileName = files[0];
+
+                bool match = Regex.IsMatch(fileName, @".*\.(jpe?g|png|bmp)");
+                if(match)
+                {
+                    imageData.SetData(fileName);
+                    UpdateImageContainer();
+                }
+                else
+                {
+                    MessageBox.Show("Wrong file format!");
+                }
             }
         }
     }

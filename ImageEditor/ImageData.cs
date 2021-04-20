@@ -109,5 +109,17 @@ namespace ImageEditor
         {
             ImageEffects.BlurEffect(Data, radius);
         }
+
+        // Apply histogram shrinking on the image
+        public void ShrinkHistogram()
+        {
+            ImageEffects.ShrinkHistogram(Data);
+        }
+
+        // Apply histogram stretching on the image
+        public void StretchHistogram()
+        {
+            ImageEffects.StrectchHistogram(Data);
+        }
     }
 }

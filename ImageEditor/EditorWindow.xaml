@@ -93,6 +93,21 @@
                     </StackPanel>
                 </Expander>
 
+                <Button x:Name="btnAutoContrast"
+                        Content="Auto Contrast"
+                        Margin="2"
+                        Click="btnAutoContrast_Click"/>
+
+                <Button x:Name="btnShrink"
+                        Content="Shrink"
+                        Margin="2"
+                        Click="btnShrink_Click"/>
+
+                <Button x:Name="btnStretch"
+                        Content="Stretch"
+                        Margin="2"
+                        Click="btnStretch_Click"/>
+
             </StackPanel>
         </Border>
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System.Text.RegularExpressions;
 using System.Windows;
+using Emgu.CV.Structure;
 
 namespace ImageEditor
 {
@@ -29,6 +30,21 @@ namespace ImageEditor
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             SaveImage();
+        }
+
+        private void btnAutoContrast_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void btnShrink_Click(object sender, RoutedEventArgs e)
+        {
+            imageData.ShrinkHistogram();
+        }
+
+        private void btnStretch_Click(object sender, RoutedEventArgs e)
+        {
+            imageData.StretchHistogram();
         }
 
         // Button to call methods
@@ -84,8 +100,7 @@ namespace ImageEditor
         private void UpdateImageContainer()
         {
             imgMain.Source = imageData.ToBitmapImage();
-            DisplayInfo();
-            
+            DisplayInfo();   
         }
 
         private void sldQuality_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

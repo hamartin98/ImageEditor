@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using Emgu.CV.Structure;
+using Microsoft.Win32;
 using System.Text.RegularExpressions;
 using System.Windows;
 
@@ -49,7 +50,7 @@ namespace ImageEditor
         // Button to call methods
         private void btnTest_Click(object sender, RoutedEventArgs e)
         {
-
+            UpdateImageContainer();
         }
 
         // Open an image from the computer and set the data of the imageData property
@@ -133,6 +134,29 @@ namespace ImageEditor
                     MessageBox.Show("Wrong file format!");
                 }
             }
+        }
+
+        private void sldHue_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        {
+            double value = sldHue.Value;
+            imageData.IncreaseHue(value);
+            UpdateImageContainer();
+        }
+
+        private void sldSaturation_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        {
+            double value = sldSaturation.Value / 100.0;
+            MessageBox.Show($"{value}");
+            imageData.IncreaseSaturation(value);
+            UpdateImageContainer();
+        }
+
+        private void sldLightness_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        {
+            double value = sldLightness.Value / 100.0;
+            MessageBox.Show($"{value}");
+            imageData.IncreaseLightness(value);
+            UpdateImageContainer();
         }
     }
 }

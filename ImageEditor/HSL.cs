@@ -6,9 +6,9 @@ namespace ImageEditor
     // Class to store and calculate HSL values
     class HSL
     {
-        public double H { get; }
-        public double S { get; }
-        public double L { get; }
+        public double H { get; private set; }
+        public double S { get; private set; }
+        public double L { get; private set; }
 
         public HSL(double H, double S, double L)
         {
@@ -17,8 +17,29 @@ namespace ImageEditor
             this.L = L;
         }
 
+        // Increase the hue value of the color
+        // 0 - 360°
+        public void HueIncreaseBy(double degree)
+        {
+            this.H = Math.Max(0, Math.Min(360, H + degree));
+        }
+
+        // Increase the saturation value of the color
+        // 0 - 1
+        public void SaturationIncreaseBy(double degree)
+        {
+            this.S = Math.Max(0.0, Math.Min(1.0, H + degree));
+        }
+
+        // Increase the lightness value of the color
+        // 0 - 1
+        public void LightnessIncreaseBy(double degree)
+        {
+            this.L = Math.Max(0.0, Math.Min(1.0, H + degree));
+        }
+
         // Calculate H, S, L values from RGB
-        public static HSL ConvertFromRGB(int red, int green, int blue)
+        public static HSL ConvertFromBgr(int blue, int green, int red)
         {
             double blueH = blue / 255.0;
             double greenH = green / 255.0;
@@ -70,6 +91,66 @@ namespace ImageEditor
             return new HSL(H, S, L);
         }
 
+        public static HSL ConvertFromBgr(Bgr color)
+        {
+            return ConvertFromBgr((int)color.Blue, (int)color.Green, (int)color.Red);
+        }
+
+
+        // Convert HSL color to Bgr color
+        public static Bgr ConvertToBgr(HSL hslColor)
+        {
+            int blue = (int)(hslColor.L * 255);
+            int green = (int)(hslColor.L * 255);
+            int red = (int)(hslColor.L * 255);
+
+            double h = hslColor.H;
+            double s = hslColor.S;
+            double l = hslColor.L;
+
+            if (hslColor.S != 0)
+            {
+                double hue = h / 360;
+                double v1 = (l < 0.5) ? (l * (1 + s)) : ((l + s) - (l * s));
+                double v2 = 2 * l - v1;
+
+                red = (int)(255 * HueToRgb(v2, v1, hue + (1/3.0)));
+                green = (int)(255 * HueToRgb(v2, v1, hue));
+                blue = (int)(255 * HueToRgb(v2, v1, hue - (1/3.0)));
+            }
+
+            return new Bgr(blue, green, red);
+        }
+
+        // Convert Hue to Rgb
+        private static double HueToRgb(double v1, double v2, double hue)
+        {
+            if (hue < 0)
+            {
+                hue++;
+            }
+            else if (hue > 1)
+            {
+                hue--;
+            }
+
+            if ((6 * hue) < 1)
+            {
+                return (v1 + (v2 - v1) * 6 * hue);
+            }
+
+            if ((2 * hue) < 1)
+            {
+                return v2;
+            }
+
+            if ((3 * hue) < 2)
+            {
+                return (v1 + (v2 - v1) * ((2.0f / 3) - hue) * 6);
+            }
+
+            return v1;
+        }
 
         // Returns the brightness of the color
         public static double GetLightness(Bgr color)
@@ -115,6 +196,30 @@ namespace ImageEditor
         public override string ToString()
         {
             return $"HSL({H}, {S}, {L})";
+        }
+
+        // Increase the given color's Hue with the given value
+        public static Bgr IncreaseHue(Bgr color, double degree)
+        {
+            HSL hslColor = ConvertFromBgr(color);
+            hslColor.HueIncreaseBy(degree);
+            return ConvertToBgr(hslColor);
+        }
+
+        // Increase the given color's Saturation with the given value
+        public static Bgr IncreaseSaturatiion(Bgr color, double percentage)
+        {
+            HSL hslColor = ConvertFromBgr(color);
+            hslColor.SaturationIncreaseBy(percentage);
+            return ConvertToBgr(hslColor);
+        }
+
+        // Increase the given color's Lightness with the given value
+        public static Bgr IncreaseLightness(Bgr color, double percentage)
+        {
+            HSL hslColor = ConvertFromBgr(color);
+            hslColor.LightnessIncreaseBy(percentage);
+            return ConvertToBgr(hslColor);
         }
     }
 }

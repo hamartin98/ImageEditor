@@ -118,5 +118,23 @@ namespace ImageEditor
         {
             ImageEffects.StrectchHistogram(Data);
         }
+
+        // Increase image's hue by the given degree
+        public void IncreaseHue(double degree)
+        {
+            Data = ImageEffects.IncreaseHueBy(Data, degree);
+        }
+
+        // Increase image's saturation by the given percentage
+        public void IncreaseSaturation(double percentage)
+        {
+            Data = ImageEffects.IncreaseSaturationBy(Data, percentage);
+        }
+
+        // Increase image's saturation by the given percentage
+        public void IncreaseLightness(double percentage)
+        {
+            Data = ImageEffects.IncreaseLightnessBy(Data, percentage);
+        }
     }
 }

@@ -86,5 +86,59 @@ namespace ImageEditor
                 CvInvoke.Imshow("Stretched", image);
             }
         }
+
+        // Increase all pixel's hue with the given degree value
+        public static Mat IncreaseHueBy(Mat original, double degree)
+        {
+            Image<Bgr, byte> image = original.ToImage<Bgr, byte>();
+            
+            for (int row = 0; row < image.Rows; row++)
+            {
+                for(int col = 0; col < image.Cols; col++)
+                {
+                    Bgr color = image[row, col];
+                    color = HSL.IncreaseHue(color, degree);
+                    image[row, col] = color;
+                }
+            }
+
+            return image.Mat;
+        }
+
+        // Increase all pixel's saturation with the given percentage value
+        public static Mat IncreaseSaturationBy(Mat original, double percentage)
+        {
+            Image<Bgr, byte> image = original.ToImage<Bgr, byte>();
+
+            for (int row = 0; row < image.Rows; row++)
+            {
+                for (int col = 0; col < image.Cols; col++)
+                {
+                    Bgr color = image[row, col];
+                    color = HSL.IncreaseSaturatiion(color, percentage);
+                    image[row, col] = color;
+                }
+            }
+
+            return image.Mat;
+        }
+
+        // Increase all pixel's lightness with the given percentage value
+        public static Mat IncreaseLightnessBy(Mat original, double percentage)
+        {
+            Image<Bgr, byte> image = original.ToImage<Bgr, byte>();
+
+            for (int row = 0; row < image.Rows; row++)
+            {
+                for (int col = 0; col < image.Cols; col++)
+                {
+                    Bgr color = image[row, col];
+                    color = HSL.IncreaseLightness(color, percentage);
+                    image[row, col] = color;
+                }
+            }
+
+            return image.Mat;
+        }
     }
 }

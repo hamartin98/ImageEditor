@@ -93,16 +93,11 @@ namespace ImageEditor
             using (Image<Gray, byte> result = AddImages(verticalImage, horizontalImage))
             {
                 Image<Bgr, byte> bgrResult = result.Convert<Bgr, byte>();
-                //Image<Gray, byte> result = verticalImage;
-
-                CvInvoke.Imshow("Normal", bgrResult);
-
+                
                 if (isColored)
                 {
                     bgrResult = Colorize(result, color);
                 }
-
-                CvInvoke.Imshow("Colorized", bgrResult);
 
                 return bgrResult;
             }

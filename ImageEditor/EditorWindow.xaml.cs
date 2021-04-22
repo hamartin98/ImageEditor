@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Media;
 
 namespace ImageEditor
 {
@@ -162,9 +163,22 @@ namespace ImageEditor
         private void btnDetectEdge_Click(object sender, RoutedEventArgs e)
         {
             bool isColored = (bool)cbEdgeColored.IsChecked;
-            Bgr color = new Bgr(255, 0, 255);
+            Bgr color = GetBgrColor();
             imageData.EdgeDetection(isColored, color);
             UpdateImageContainer();
+        }
+
+        // Returns the selected color from the colorPicker
+        private Color GetColor()
+        {
+            return (Color)colorPicker.SelectedColor;
+        }
+
+        // Convert the Color type color to a Bgr type color
+        private Bgr GetBgrColor()
+        {
+            Color color = GetColor();
+            return new Bgr(color.B, color.G, color.R);
         }
     }
 }

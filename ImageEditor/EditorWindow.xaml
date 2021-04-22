@@ -108,8 +108,7 @@
                         Margin="2"
                         Click="btnStretch_Click"/>
 
-                <Expander Header="HSL options"
-                          IsExpanded="True">
+                <Expander Header="HSL options">
                     <StackPanel>
 
                         <TextBlock Text="Hue"/>
@@ -141,6 +140,24 @@
                             TickPlacement="BottomRight"
                             IsSnapToTickEnabled="True"
                             Thumb.DragCompleted="sldLightness_DragCompleted"/>
+
+                    </StackPanel>
+                </Expander>
+
+                <Expander Header="Edge detection options"
+                          IsExpanded="True">
+                    <StackPanel>
+
+                        <TextBlock Text="Edge detection"/>
+
+                        <CheckBox x:Name="cbEdgeColored"
+                                  Content="Colored edges"
+                                  Margin="5"/>
+
+                        <Button x:Name="btnDetectEdge"
+                                Margin="5"
+                                Content="Detect Edges"
+                                Click="btnDetectEdge_Click"/>
 
                     </StackPanel>
                 </Expander>

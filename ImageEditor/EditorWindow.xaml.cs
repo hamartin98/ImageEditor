@@ -12,9 +12,10 @@ namespace ImageEditor
     {
         private ImageData imageData = null;
         private int saveQuality = 100;
-        private readonly string fileDialogFilter = "Image files|*.jpg;*.jpeg;*.png|" +
+        private readonly string fileDialogFilter = "Image files|*.jpg;*.jpeg;*.png;*.bmp;|" +
                                 "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
-                                "Portable Network Graphic (*.png)|*.png";
+                                "Portable Network Graphic (*.png)|*.png|" +
+                                "Bmp (*.bmp)|*.bmp";
 
         public EditorWindow()
         {
@@ -50,6 +51,7 @@ namespace ImageEditor
         // Button to call methods
         private void btnTest_Click(object sender, RoutedEventArgs e)
         {
+            //imageData.EdgeDetection(false);
             UpdateImageContainer();
         }
 
@@ -146,7 +148,6 @@ namespace ImageEditor
         private void sldSaturation_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
             double value = sldSaturation.Value / 100.0;
-            MessageBox.Show($"{value}");
             imageData.IncreaseSaturation(value);
             UpdateImageContainer();
         }
@@ -154,8 +155,15 @@ namespace ImageEditor
         private void sldLightness_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
             double value = sldLightness.Value / 100.0;
-            MessageBox.Show($"{value}");
             imageData.IncreaseLightness(value);
+            UpdateImageContainer();
+        }
+
+        private void btnDetectEdge_Click(object sender, RoutedEventArgs e)
+        {
+            bool isColored = (bool)cbEdgeColored.IsChecked;
+            Bgr color = new Bgr(255, 0, 255);
+            imageData.EdgeDetection(isColored, color);
             UpdateImageContainer();
         }
     }

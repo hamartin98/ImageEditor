@@ -136,5 +136,11 @@ namespace ImageEditor
         {
             Data = ImageEffects.IncreaseLightnessBy(Data, percentage);
         }
+
+        // Detect edges on the image, if iscolored is true, the detected edges color will be set to the given color
+        public void EdgeDetection(bool isColored, Bgr color)
+        {
+            Data = Convolution.EdgeDetection(Data, isColored, color).Mat;
+        }
     }
 }

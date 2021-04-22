@@ -20,9 +20,12 @@ namespace ImageEditor
             double maxTemp = double.MinValue;
             double lightness;
 
-            for (int row = 0; row < image.Rows; row++)
+            int rows = image.Rows;
+            int cols = image.Cols;
+
+            for (int row = 0; row < rows; ++row)
             {
-                for (int col = 0; col < image.Cols; col++)
+                for (int col = 0; col < cols; ++col)
                 {
                     Bgr color = image[row, col];
                     lightness = HSL.GetLightness(color);
@@ -36,67 +39,68 @@ namespace ImageEditor
         }
 
         // Map values between the lowest and highest lightness
-        public static void ShrinkHistogram(Mat original)
+        public static Image<Bgr, byte> ShrinkHistogram(Mat original)
         {
-            using(Image<Bgr, byte> image = original.ToImage<Bgr, byte>())
+            Image<Bgr, byte> image = original.ToImage<Bgr, byte>();
+            double minL;
+            double maxL;
+            Bgr color;
+
+            int rows = image.Rows;
+            int cols = image.Cols;
+
+            GetMinAndMaxLightness(image, out minL, out maxL);
+
+            for (int row = 0; row < rows; ++row)
             {
-                double minL;
-                double maxL;
-                Bgr color;
-
-                GetMinAndMaxLightness(image, out minL, out maxL);
-
-                for (int row = 0; row < image.Rows; row++)
+                for (int col = 0; col < cols; ++col)
                 {
-                    for (int col = 0; col < image.Cols; col++)
-                    {
-                        color = image[row, col];
-                        image[row, col] = HSL.GetEqualizedValue(minL, maxL, color);
-                    }
+                    color = image[row, col];
+                    image[row, col] = HSL.GetEqualizedValue(minL, maxL, color);
                 }
-
-                original = image.Mat;
-
-                CvInvoke.Imshow("Shrinked", image);
             }
+
+            return image;
         }
 
         // Stretch images histogram based on the lightness values
-        public static void StrectchHistogram(Mat original)
+        public static Image<Bgr, byte> StrectchHistogram(Mat original)
         {
-            using (Image<Bgr, byte> image = original.ToImage<Bgr, byte>())
+            Image<Bgr, byte> image = original.ToImage<Bgr, byte>();
+            double minL;
+            double maxL;
+            Bgr color;
+
+            int rows = image.Rows;
+            int cols = image.Cols;
+
+            GetMinAndMaxLightness(image, out minL, out maxL);
+
+            for (int row = 0; row < rows; ++row)
             {
-                double minL;
-                double maxL;
-                Bgr color;
-
-                GetMinAndMaxLightness(image, out minL, out maxL);
-
-                for (int row = 0; row < image.Rows; row++)
+                for (int col = 0; col < cols; ++col)
                 {
-                    for (int col = 0; col < image.Cols; col++)
-                    {
-                        color = image[row, col];
-                        image[row, col] = HSL.StretchValue(color, maxL - minL);
-                    }
+                    color = image[row, col];
+                    image[row, col] = HSL.StretchValue(color, maxL - minL);
                 }
-
-                original = image.Mat;
-
-                CvInvoke.Imshow("Stretched", image);
             }
+
+            return image;
         }
 
         // Increase all pixel's hue with the given degree value
         public static Mat IncreaseHueBy(Mat original, double degree)
         {
             Image<Bgr, byte> image = original.ToImage<Bgr, byte>();
-            
-            for (int row = 0; row < image.Rows; row++)
+            int rows = image.Rows;
+            int cols = image.Cols;
+            Bgr color;
+
+            for (int row = 0; row < rows; ++row)
             {
-                for(int col = 0; col < image.Cols; col++)
+                for(int col = 0; col < cols; ++col)
                 {
-                    Bgr color = image[row, col];
+                    color = image[row, col];
                     color = HSL.IncreaseHue(color, degree);
                     image[row, col] = color;
                 }
@@ -109,12 +113,15 @@ namespace ImageEditor
         public static Mat IncreaseSaturationBy(Mat original, double percentage)
         {
             Image<Bgr, byte> image = original.ToImage<Bgr, byte>();
+            int rows = image.Rows;
+            int cols = image.Cols;
+            Bgr color;
 
-            for (int row = 0; row < image.Rows; row++)
+            for (int row = 0; row < rows; ++row)
             {
-                for (int col = 0; col < image.Cols; col++)
+                for (int col = 0; col < cols; ++col)
                 {
-                    Bgr color = image[row, col];
+                    color = image[row, col];
                     color = HSL.IncreaseSaturatiion(color, percentage);
                     image[row, col] = color;
                 }
@@ -127,12 +134,15 @@ namespace ImageEditor
         public static Mat IncreaseLightnessBy(Mat original, double percentage)
         {
             Image<Bgr, byte> image = original.ToImage<Bgr, byte>();
+            int rows = image.Rows;
+            int cols = image.Cols;
+            Bgr color;
 
-            for (int row = 0; row < image.Rows; row++)
+            for (int row = 0; row < rows; ++row)
             {
-                for (int col = 0; col < image.Cols; col++)
+                for (int col = 0; col < cols; ++col)
                 {
-                    Bgr color = image[row, col];
+                    color = image[row, col];
                     color = HSL.IncreaseLightness(color, percentage);
                     image[row, col] = color;
                 }

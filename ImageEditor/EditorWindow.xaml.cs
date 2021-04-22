@@ -42,11 +42,13 @@ namespace ImageEditor
         private void btnShrink_Click(object sender, RoutedEventArgs e)
         {
             imageData.ShrinkHistogram();
+            UpdateImageContainer();
         }
 
         private void btnStretch_Click(object sender, RoutedEventArgs e)
         {
             imageData.StretchHistogram();
+            UpdateImageContainer();
         }
 
         // Button to call methods

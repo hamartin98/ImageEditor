@@ -59,6 +59,8 @@
             <wpfTool:ColorCanvas SelectedColor="Black"
                                  Margin="10"
                                  x:Name="colorPicker"/>
+            
+            
 
         </Grid>
 

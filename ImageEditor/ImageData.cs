@@ -110,13 +110,13 @@ namespace ImageEditor
         // Apply histogram shrinking on the image
         public void ShrinkHistogram()
         {
-            ImageEffects.ShrinkHistogram(Data);
+            Data = ImageEffects.ShrinkHistogram(Data).Mat;
         }
 
         // Apply histogram stretching on the image
         public void StretchHistogram()
         {
-            ImageEffects.StrectchHistogram(Data);
+            Data = ImageEffects.StrectchHistogram(Data).Mat;
         }
 
         // Increase image's hue by the given degree
@@ -140,7 +140,7 @@ namespace ImageEditor
         // Detect edges on the image, if iscolored is true, the detected edges color will be set to the given color
         public void EdgeDetection(bool isColored, Bgr color)
         {
-            Data = Convolution.EdgeDetection(Data, isColored, color).Mat;
+            Data = Convolution.ParallelEdgeDetection(Data, isColored, color).Mat;
         }
     }
 }

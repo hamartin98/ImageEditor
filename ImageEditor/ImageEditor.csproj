@@ -8,11 +8,37 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Icons\Close.png" />
+    <None Remove="Icons\Folder.png" />
+    <None Remove="Icons\Go back.png" />
+    <None Remove="Icons\Go forward.png" />
+    <None Remove="Icons\Save.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Emgu.CV" Version="4.5.1.4349" />
     <PackageReference Include="Emgu.CV.Bitmap" Version="4.5.1.4349" />
     <PackageReference Include="Emgu.CV.runtime.windows" Version="4.5.1.4349" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.0.2" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Icons\Close.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\Folder.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\Go back.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\Go forward.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\Save.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

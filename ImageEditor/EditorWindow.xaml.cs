@@ -24,46 +24,6 @@ namespace ImageEditor
             imageData = new ImageData();
         }
 
-        private void btnOpen_Click(object sender, RoutedEventArgs e)
-        {
-            OpenImage();
-        }
-
-        private void btnSave_Click(object sender, RoutedEventArgs e)
-        {
-            SaveImage();
-        }
-
-        private void btnAutoContrast_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
-        private void btnShrink_Click(object sender, RoutedEventArgs e)
-        {
-            if(imageData.IsDataSet)
-            {
-                imageData.ShrinkHistogram();
-                UpdateImageContainer();
-            }
-        }
-
-        private void btnStretch_Click(object sender, RoutedEventArgs e)
-        {
-            if (imageData.IsDataSet)
-            {
-                imageData.StretchHistogram();
-                UpdateImageContainer();
-            }
-        }
-
-        // Button to call methods
-        private void btnTest_Click(object sender, RoutedEventArgs e)
-        {
-            //imageData.EdgeDetection(false);
-            UpdateImageContainer();
-        }
-
         // Open an image from the computer and set the data of the imageData property
         private void OpenImage()
         {
@@ -208,6 +168,86 @@ namespace ImageEditor
         {
             Color color = GetColor();
             return new Bgr(color.B, color.G, color.R);
+        }
+
+        private void menuOpen_Click(object sender, RoutedEventArgs e)
+        {
+            OpenImage();
+        }
+
+        private void menuSave_Click(object sender, RoutedEventArgs e)
+        {
+            SaveImage();
+        }
+
+        private void menuSaveAs_Click(object sender, RoutedEventArgs e)
+        {
+            LoadOptionsFrame("SaveOptions");
+        }
+
+        private void menuExit_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void menuRedo_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void menuRedo_Click_1(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void menuUndo_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void menuCopy_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void menuPaste_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void menuBlur_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void menuShrink_Click(object sender, RoutedEventArgs e)
+        {
+            if (imageData.IsDataSet)
+            {
+                imageData.ShrinkHistogram();
+                UpdateImageContainer();
+            }
+        }
+
+        private void menuStretch_Click(object sender, RoutedEventArgs e)
+        {
+            if (imageData.IsDataSet)
+            {
+                imageData.StretchHistogram();
+                UpdateImageContainer();
+            }
+        }
+
+        private void menuEdgeDetect_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        // Load an user control into the optionsFrame to show different settings
+        // Search for items in the OptionFrames folder
+        private void LoadOptionsFrame(string fileName)
+        {
+            optionsFrame.Source = new System.Uri($"OptionFrames/{fileName}.xaml", System.UriKind.RelativeOrAbsolute);
         }
     }
 }

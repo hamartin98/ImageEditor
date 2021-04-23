@@ -12,7 +12,7 @@
     <Grid>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="70"/>
         </Grid.RowDefinitions>
@@ -23,26 +23,80 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.ColumnSpan="3"
-                    x:Name="menuPanel"
-                    Orientation="Horizontal">
+        <Menu x:Name="mainMenu" Grid.ColumnSpan="3">
 
-            <Button Content="Open"
-                    Margin="5"
-                    x:Name="btnOpen"
-                    Click="btnOpen_Click"/>
+            <MenuItem Header="File">
+
+                <MenuItem Header="_Open"
+                          x:Name="menuOpen"
+                          Click="menuOpen_Click"/>
+
+                <MenuItem Header="_Save"
+                          x:Name="menuSave"
+                          Click="menuSave_Click"/>
+
+                <MenuItem Header="_Save as"
+                          x:Name="menuSaveAs"
+                          Click="menuSaveAs_Click"/>
+
+                <Separator/>
+
+                <MenuItem Header="_Exit"
+                          x:Name="menuExit"
+                          Click="menuExit_Click"/>
+
+            </MenuItem>
+
+            <MenuItem Header="Edit">
+
+                <MenuItem Header="_Undo"
+                          x:Name="menuUndo"
+                          Click="menuUndo_Click"/>
+
+                <MenuItem Header="_Redo"
+                          x:Name="menuRedo"
+                          Click="menuRedo_Click"/>
+                
+                <Separator/>
+                
+                <MenuItem Header="_Copy"
+                          x:Name="menuCopy"
+                          Click="menuCopy_Click"/>
+
+                <MenuItem Header="_Paste"
+                          x:Name="menuPaste"
+                          Click="menuPaste_Click"/>
+
+            </MenuItem>
+
+            <MenuItem Header="Effects">
+
+                <MenuItem Header="Blur"
+                          x:Name="menuBlur"
+                          Click="menuBlur_Click"/>
+
+                <MenuItem Header="Shrink"
+                          x:Name="menuShrink"
+                          Click="menuShrink_Click"/>
+
+                <MenuItem Header="Stretch"
+                          x:Name="menuStretch"
+                          Click="menuStretch_Click"/>
+                
+            </MenuItem>
+
+            <MenuItem Header="Color">
+            </MenuItem>
             
-            <Button Content="Save"
-                    Margin="5"
-                    x:Name="btnSave"
-                    Click="btnSave_Click"/>
+            <MenuItem Header="Filters">
 
-            <Button Content="Test"
-                    Margin="5"
-                    x:Name="btnTest"
-                    Click="btnTest_Click"/>
+                <MenuItem Header="Detect edges"
+                          x:Name="menuEdgeDetect"
+                          Click="menuEdgeDetect_Click"/>
 
-        </StackPanel>
+            </MenuItem>
+
+        </Menu>
 
         <Image Grid.Row="1"
                Name="imgMain">
@@ -59,16 +113,20 @@
             <wpfTool:ColorCanvas SelectedColor="Black"
                                  Margin="10"
                                  x:Name="colorPicker"/>
-            
-            
+
+            <Frame Grid.Row="1"
+                   x:Name="optionsFrame">
+                
+            </Frame>
 
         </Grid>
-
+        
         <Border BorderThickness="1"
                 BorderBrush="Black"
                 Grid.Row="1"
                 Grid.Column="2"
-                Margin="2">
+                Margin="2"
+                Visibility="Collapsed">
             
             <StackPanel>
 
@@ -104,21 +162,6 @@
 
                     </StackPanel>
                 </Expander>
-
-                <Button x:Name="btnAutoContrast"
-                        Content="Auto Contrast"
-                        Margin="2"
-                        Click="btnAutoContrast_Click"/>
-
-                <Button x:Name="btnShrink"
-                        Content="Shrink"
-                        Margin="2"
-                        Click="btnShrink_Click"/>
-
-                <Button x:Name="btnStretch"
-                        Content="Stretch"
-                        Margin="2"
-                        Click="btnStretch_Click"/>
 
                 <Expander Header="HSL options">
                     <StackPanel>
@@ -191,6 +234,6 @@
                     Grid.ColumnSpan="2">
 
         </StackPanel>
-
+        
     </Grid>
 </Window>

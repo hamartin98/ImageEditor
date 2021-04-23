@@ -99,7 +99,9 @@
         </Menu>
 
         <Image Grid.Row="1"
-               Name="imgMain">
+               Name="imgMain"
+               MouseEnter="imgMain_MouseEnter"
+               MouseLeave="imgMain_MouseLeave">
         </Image>
 
         <Grid Grid.Row="1"
@@ -234,6 +236,16 @@
                     Grid.ColumnSpan="2">
 
         </StackPanel>
+
+        <wpfTool:MagnifierManager.Magnifier>
+            <wpfTool:Magnifier x:Name="magnifier"
+                               ZoomFactor="0"
+                               FrameType="Rectangle"
+                               Width="160"
+                               Height="90"/>
+            
+        </wpfTool:MagnifierManager.Magnifier>
         
+
     </Grid>
 </Window>

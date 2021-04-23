@@ -249,5 +249,20 @@ namespace ImageEditor
         {
             optionsFrame.Source = new System.Uri($"OptionFrames/{fileName}.xaml", System.UriKind.RelativeOrAbsolute);
         }
+
+        private void btnmagni_Click(object sender, RoutedEventArgs e)
+        {
+            //myMagnifier.ZoomFactor = 0.05;
+        }
+
+        private void imgMain_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            magnifier.ZoomFactor = 0.5;
+        }
+
+        private void imgMain_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            magnifier.ZoomFactor = 0;
+        }
     }
 }

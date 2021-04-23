@@ -41,14 +41,20 @@ namespace ImageEditor
 
         private void btnShrink_Click(object sender, RoutedEventArgs e)
         {
-            imageData.ShrinkHistogram();
-            UpdateImageContainer();
+            if(imageData.IsDataSet)
+            {
+                imageData.ShrinkHistogram();
+                UpdateImageContainer();
+            }
         }
 
         private void btnStretch_Click(object sender, RoutedEventArgs e)
         {
-            imageData.StretchHistogram();
-            UpdateImageContainer();
+            if (imageData.IsDataSet)
+            {
+                imageData.StretchHistogram();
+                UpdateImageContainer();
+            }
         }
 
         // Button to call methods
@@ -80,17 +86,20 @@ namespace ImageEditor
         // Save the image to the computer
         private void SaveImage()
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.DefaultExt = imageData.Format;
-            saveFileDialog.AddExtension = true;
-
-            saveFileDialog.Title = "Save image";
-            saveFileDialog.Filter = fileDialogFilter;
-            
-            if (saveFileDialog.ShowDialog() == true)
+            if (imageData.IsDataSet)
             {
-                string destPath = saveFileDialog.FileName;
-                imageData.Save(destPath, saveQuality);
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.DefaultExt = imageData.Format;
+                saveFileDialog.AddExtension = true;
+
+                saveFileDialog.Title = "Save image";
+                saveFileDialog.Filter = fileDialogFilter;
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    string destPath = saveFileDialog.FileName;
+                    imageData.Save(destPath, saveQuality);
+                }
             }
         }
 
@@ -104,8 +113,11 @@ namespace ImageEditor
         // Sets the image on the UI
         private void UpdateImageContainer()
         {
-            imgMain.Source = imageData.ToBitmapImage();
-            DisplayInfo();   
+            if (imageData.IsDataSet)
+            {
+                imgMain.Source = imageData.ToBitmapImage();
+                DisplayInfo();
+            }
         }
 
         private void sldQuality_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -115,9 +127,12 @@ namespace ImageEditor
 
         private void sldBlur_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
-            int radius = (int)sldBlur.Value;
-            imageData.BlurEffect(radius);
-            UpdateImageContainer();
+            if (imageData.IsDataSet)
+            {
+                int radius = (int)sldBlur.Value;
+                imageData.BlurEffect(radius);
+                UpdateImageContainer();
+            }
         }
 
         // Occurs when files are dropped on the window, only the first file and only image files are accepted
@@ -143,31 +158,43 @@ namespace ImageEditor
 
         private void sldHue_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
-            double value = sldHue.Value;
-            imageData.IncreaseHue(value);
-            UpdateImageContainer();
+            if (imageData.IsDataSet)
+            {
+                double value = sldHue.Value;
+                imageData.IncreaseHue(value);
+                UpdateImageContainer();
+            }
         }
 
         private void sldSaturation_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
-            double value = sldSaturation.Value / 100.0;
-            imageData.IncreaseSaturation(value);
-            UpdateImageContainer();
+            if (imageData.IsDataSet)
+            {
+                double value = sldSaturation.Value / 100.0;
+                imageData.IncreaseSaturation(value);
+                UpdateImageContainer();
+            }
         }
 
         private void sldLightness_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
-            double value = sldLightness.Value / 100.0;
-            imageData.IncreaseLightness(value);
-            UpdateImageContainer();
+            if (imageData.IsDataSet)
+            {
+                double value = sldLightness.Value / 100.0;
+                imageData.IncreaseLightness(value);
+                UpdateImageContainer();
+            }
         }
 
         private void btnDetectEdge_Click(object sender, RoutedEventArgs e)
         {
-            bool isColored = (bool)cbEdgeColored.IsChecked;
-            Bgr color = GetBgrColor();
-            imageData.EdgeDetection(isColored, color);
-            UpdateImageContainer();
+            if (imageData.IsDataSet)
+            {
+                bool isColored = (bool)cbEdgeColored.IsChecked;
+                Bgr color = GetBgrColor();
+                imageData.EdgeDetection(isColored, color);
+                UpdateImageContainer();
+            }
         }
 
         // Returns the selected color from the colorPicker

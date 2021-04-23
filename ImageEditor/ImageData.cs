@@ -28,6 +28,12 @@ namespace ImageEditor
         // Store format - ImwriteFlags pairs to save images in the correct format
         private Dictionary<string, ImwriteFlags> saveFlags;
 
+        // returns true if the data is not null
+        public bool IsDataSet 
+        { 
+            get => Data != null;
+        }
+
         public ImageData()
         {
             InitSaveFlags();

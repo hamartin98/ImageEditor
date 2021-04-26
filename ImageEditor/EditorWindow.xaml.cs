@@ -177,11 +177,6 @@ namespace ImageEditor
             }
         }
 
-        private void btnmagni_Click(object sender, RoutedEventArgs e)
-        {
-            //myMagnifier.ZoomFactor = 0.05;
-        }
-
         private void imgMain_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             magnifier.ZoomFactor = 0.5;
@@ -251,6 +246,23 @@ namespace ImageEditor
                 imageData.IncreaseLightness(delta);
                 UpdateImageContainer();
             };
+        }
+
+        private void menuEdgeDetect_Click(object sender, RoutedEventArgs e)
+        {
+            EdgeDetectionSettings edgeDetectionSettings = new EdgeDetectionSettings();
+            SetOptionsControl(edgeDetectionSettings);
+
+            edgeDetectionSettings.DetectButtonClicked += (string method, bool isColored) =>
+            {
+                imageData.EdgeDetection(isColored, GetBgrColor());
+                UpdateImageContainer();
+            };
+        }
+
+        private void menuSaveAs_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

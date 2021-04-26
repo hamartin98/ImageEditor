@@ -119,13 +119,19 @@ namespace ImageEditor
         // Apply histogram shrinking on the image
         public void ShrinkHistogram()
         {
-            Data = ImageEffects.ShrinkHistogram(Data).Mat;
+            if (Data != null)
+            {
+                Data = ImageEffects.ShrinkHistogram(Data).Mat;
+            }
         }
 
         // Apply histogram stretching on the image
         public void StretchHistogram()
         {
-            Data = ImageEffects.StrectchHistogram(Data).Mat;
+            if (Data != null)
+            {
+                Data = ImageEffects.StrectchHistogram(Data).Mat;
+            }
         }
 
         // Increase image's hue by the given degree
@@ -140,19 +146,28 @@ namespace ImageEditor
         // Increase image's saturation by the given percentage
         public void IncreaseSaturation(double percentage)
         {
-            Data = ImageEffects.IncreaseSaturationBy(Data, percentage);
+            if (Data != null)
+            {
+                Data = ImageEffects.IncreaseSaturationBy(Data, percentage);
+            }
         }
 
         // Increase image's saturation by the given percentage
         public void IncreaseLightness(double percentage)
         {
-            Data = ImageEffects.IncreaseLightnessBy(Data, percentage);
+            if (Data != null)
+            {
+                Data = ImageEffects.IncreaseLightnessBy(Data, percentage);
+            }
         }
 
         // Detect edges on the image, if iscolored is true, the detected edges color will be set to the given color
         public void EdgeDetection(bool isColored, Bgr color)
         {
-            Data = Convolution.ParallelEdgeDetection(Data, isColored, color).Mat;
+            if (Data != null)
+            {
+                Data = Convolution.ParallelEdgeDetection(Data, isColored, color).Mat;
+            }
         }
     }
 }

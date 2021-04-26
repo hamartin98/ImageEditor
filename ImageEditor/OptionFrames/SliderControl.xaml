@@ -6,24 +6,35 @@
              xmlns:local="clr-namespace:ImageEditor.OptionFrames"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="400">
-    <StackPanel Margin="10">
 
-        <TextBlock x:Name="tbTitle"
-                   Margin="10"
-                   FontSize="16"/>
+        <StackPanel Margin="10">
 
-        <DockPanel Margin="10" VerticalAlignment="Center">
+            <Border BorderThickness="2"
+                    BorderBrush="Gray">
 
-            <TextBlock Text="{ Binding ElementName=sldValue, Path = Value, StringFormat={}{0:N1}}"
-                       DockPanel.Dock="Right"
-                       VerticalAlignment="Center"/>
+            <StackPanel>
 
-            <Slider x:Name="sldValue"
-                Margin="10"
-                TickPlacement="BottomRight"
-                Thumb.DragCompleted="sldValue_DragCompleted"/>
+                <TextBlock x:Name="tbTitle"
+                           Margin="10"
+                           FontSize="16"
+                           Text="Title"/>
 
-        </DockPanel>
-        
+                <DockPanel Margin="10"
+                           VerticalAlignment="Center">
+
+                    <TextBlock Text="{ Binding ElementName=sldValue, Path = Value, StringFormat={}{0:N1}}"
+                               DockPanel.Dock="Right"
+                               VerticalAlignment="Center"/>
+
+                    <Slider x:Name="sldValue"
+                            Margin="10"
+                            TickPlacement="BottomRight"
+                            Thumb.DragCompleted="sldValue_DragCompleted"/>
+
+                </DockPanel>
+            </StackPanel>
+
+        </Border>
     </StackPanel>
+    
 </UserControl>

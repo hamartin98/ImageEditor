@@ -141,9 +141,7 @@
         </StackPanel>
 
         <StackPanel Grid.Row="2"
-                    Grid.Column="1"
-                    Grid.ColumnSpan="2">
-
+                    Grid.Column="1">
         </StackPanel>
 
         <wpfTool:MagnifierManager.Magnifier>
@@ -155,6 +153,5 @@
             
         </wpfTool:MagnifierManager.Magnifier>
         
-
     </Grid>
 </Window>

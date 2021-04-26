@@ -85,21 +85,6 @@ namespace ImageEditor
             }
         }
 
-        private void sldQuality_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            saveQuality = (int)sldQuality.Value;
-        }
-
-        private void sldBlur_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
-        {
-            if (imageData.IsDataSet)
-            {
-                int radius = (int)sldBlur.Value;
-                imageData.BlurEffect(radius);
-                UpdateImageContainer();
-            }
-        }
-
         // Occurs when files are dropped on the window, only the first file and only image files are accepted
         private void Window_Drop(object sender, DragEventArgs e)
         {
@@ -118,47 +103,6 @@ namespace ImageEditor
                 {
                     MessageBox.Show("Wrong file format!");
                 }
-            }
-        }
-
-        private void sldHue_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
-        {
-            if (imageData.IsDataSet)
-            {
-                double value = sldHue.Value;
-                imageData.IncreaseHue(value);
-                UpdateImageContainer();
-            }
-        }
-
-        private void sldSaturation_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
-        {
-            if (imageData.IsDataSet)
-            {
-                double value = sldSaturation.Value / 100.0;
-                imageData.IncreaseSaturation(value);
-                UpdateImageContainer();
-            }
-        }
-
-        private void sldLightness_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
-        {
-            if (imageData.IsDataSet)
-            {
-                double value = sldLightness.Value / 100.0;
-                imageData.IncreaseLightness(value);
-                UpdateImageContainer();
-            }
-        }
-
-        private void btnDetectEdge_Click(object sender, RoutedEventArgs e)
-        {
-            if (imageData.IsDataSet)
-            {
-                bool isColored = (bool)cbEdgeColored.IsChecked;
-                Bgr color = GetBgrColor();
-                imageData.EdgeDetection(isColored, color);
-                UpdateImageContainer();
             }
         }
 
@@ -183,11 +127,6 @@ namespace ImageEditor
         private void menuSave_Click(object sender, RoutedEventArgs e)
         {
             SaveImage();
-        }
-
-        private void menuSaveAs_Click(object sender, RoutedEventArgs e)
-        {
-            LoadOptionsFrame("SaveOptions");
         }
 
         private void menuExit_Click(object sender, RoutedEventArgs e)
@@ -236,24 +175,6 @@ namespace ImageEditor
                 imageData.StretchHistogram();
                 UpdateImageContainer();
             }
-        }
-
-        private void menuEdgeDetect_Click(object sender, RoutedEventArgs e)
-        {
-            if (imageData.IsDataSet)
-            {
-                bool isColored = (bool)cbEdgeColored.IsChecked;
-                Bgr color = GetBgrColor();
-                imageData.EdgeDetection(true, color);
-                UpdateImageContainer();
-            }
-        }
-
-        // Load an user control into the optionsFrame to show different settings
-        // Search for items in the OptionFrames folder
-        private void LoadOptionsFrame(string fileName)
-        {
-            optionsFrame.Source = new System.Uri($"OptionFrames/{fileName}.xaml", System.UriKind.RelativeOrAbsolute);
         }
 
         private void btnmagni_Click(object sender, RoutedEventArgs e)

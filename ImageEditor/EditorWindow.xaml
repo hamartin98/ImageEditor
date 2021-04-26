@@ -20,7 +20,6 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*"/>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
 
         <Menu x:Name="mainMenu" Grid.ColumnSpan="3">
@@ -130,112 +129,7 @@
                                  Margin="10"
                                  x:Name="colorPicker"/>
 
-            <Frame Grid.Row="1"
-                   Grid.Column="1"
-                   x:Name="optionsFrame">
-                
-            </Frame>
-
         </Grid>
-        
-        <Border BorderThickness="1"
-                BorderBrush="Black"
-                Grid.Row="1"
-                Grid.Column="2"
-                Margin="2"
-                Visibility="Collapsed">
-            
-            <StackPanel>
-
-                <Expander Header="Save options">
-                    <StackPanel>
-                    
-                        <TextBlock Text="Image quality"/>
-                    
-                        <Slider x:Name="sldQuality"
-                            Maximum="100"
-                            Margin="10"
-                            TickFrequency="10"
-                            TickPlacement="BottomRight"
-                            IsSnapToTickEnabled="True"
-                            ValueChanged="sldQuality_ValueChanged"/>
-                    
-                    </StackPanel>
-                </Expander>
-
-                <Expander Header="Blur options">
-                    <StackPanel>
-
-                        <TextBlock Text="Blur radius"/>
-
-                        <Slider x:Name="sldBlur"
-                            Minimum="1"
-                            Maximum="9"
-                            Margin="10"
-                            TickFrequency="2"
-                            TickPlacement="BottomRight"
-                            IsSnapToTickEnabled="True"
-                            Thumb.DragCompleted="sldBlur_DragCompleted"/>
-
-                    </StackPanel>
-                </Expander>
-
-                <Expander Header="HSL options">
-                    <StackPanel>
-
-                        <TextBlock Text="Hue"/>
-
-                        <Slider x:Name="sldHue"
-                            Minimum="0"
-                            Maximum="360"
-                            Margin="10"
-                            TickPlacement="BottomRight"
-                            IsSnapToTickEnabled="True"
-                            Thumb.DragCompleted="sldHue_DragCompleted"/>
-
-                        <TextBlock Text="Saturation"/>
-
-                        <Slider x:Name="sldSaturation"
-                            Minimum="0"
-                            Maximum="100"
-                            Margin="10"
-                            TickPlacement="BottomRight"
-                            IsSnapToTickEnabled="True"
-                            Thumb.DragCompleted="sldSaturation_DragCompleted"/>
-
-                        <TextBlock Text="Lightness"/>
-
-                        <Slider x:Name="sldLightness"
-                            Minimum="0"
-                            Maximum="100"
-                            Margin="10"
-                            TickPlacement="BottomRight"
-                            IsSnapToTickEnabled="True"
-                            Thumb.DragCompleted="sldLightness_DragCompleted"/>
-
-                    </StackPanel>
-                </Expander>
-
-                <Expander Header="Edge detection options"
-                          IsExpanded="True">
-                    <StackPanel>
-
-                        <TextBlock Text="Edge detection"/>
-
-                        <CheckBox x:Name="cbEdgeColored"
-                                  Content="Colored edges"
-                                  Margin="5"/>
-
-                        <Button x:Name="btnDetectEdge"
-                                Margin="5"
-                                Content="Detect Edges"
-                                Click="btnDetectEdge_Click"/>
-
-                    </StackPanel>
-                </Expander>
-
-            </StackPanel>
-        </Border>
 
         <StackPanel Grid.Row="2"
                     Orientation="Horizontal">

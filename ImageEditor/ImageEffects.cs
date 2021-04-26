@@ -124,7 +124,7 @@ namespace ImageEditor
                 for (int col = 0; col < cols; ++col)
                 {
                     color = image[row, col];
-                    color = HSL.IncreaseSaturatiion(color, percentage);
+                    color = HSL.IncreaseSaturatiion(color, percentage / 100.0);
                     image[row, col] = color;
                 }
             }
@@ -145,7 +145,7 @@ namespace ImageEditor
                 for (int col = 0; col < cols; ++col)
                 {
                     color = image[row, col];
-                    color = HSL.IncreaseLightness(color, percentage);
+                    color = HSL.IncreaseLightness(color, percentage / 100.0);
                     image[row, col] = color;
                 }
             }

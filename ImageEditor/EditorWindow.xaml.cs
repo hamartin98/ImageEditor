@@ -20,6 +20,9 @@ namespace ImageEditor
                                 "Portable Network Graphic (*.png)|*.png|" +
                                 "Bmp (*.bmp)|*.bmp";
 
+        // store the slider to remove when a new one is added
+        private UserControl currentSlider = null;
+
         public EditorWindow()
         {
             InitializeComponent();
@@ -272,7 +275,13 @@ namespace ImageEditor
         private void SetOptionsControl(UserControl control)
         {
             Grid.SetRow(control, 1);
+            if(currentSlider != null)
+            {
+                // Remove the previous slider
+                settingsGrid.Children.Remove(currentSlider);
+            }
             settingsGrid.Children.Add(control);
+            currentSlider = control;
         }
 
         private void menuBlur_Click(object sender, RoutedEventArgs e)
@@ -289,12 +298,36 @@ namespace ImageEditor
 
         private void menuHue_Click(object sender, RoutedEventArgs e)
         {
-            SliderControl sliderControl = new SliderControl("Hue options", -100, 100, 10, 0, 10);
+            SliderControl sliderControl = new SliderControl("Hue options", -360, 360, 10, 0, 10);
             SetOptionsControl(sliderControl);
 
             sliderControl.ValueChanged += (double delta) =>
             {
                 imageData.IncreaseHue(delta);
+                UpdateImageContainer();
+            };
+        }
+
+        private void menuSaturation_Click(object sender, RoutedEventArgs e)
+        {
+            SliderControl sliderControl = new SliderControl("Saturation options", -100, 100, 10, 0, 10);
+            SetOptionsControl(sliderControl);
+
+            sliderControl.ValueChanged += (double delta) =>
+            {
+                imageData.IncreaseSaturation(delta);
+                UpdateImageContainer();
+            };
+        }
+
+        private void menulightness_Click(object sender, RoutedEventArgs e)
+        {
+            SliderControl sliderControl = new SliderControl("Lightness options", -100, 100, 10, 0, 10);
+            SetOptionsControl(sliderControl);
+
+            sliderControl.ValueChanged += (double delta) =>
+            {
+                imageData.IncreaseLightness(delta);
                 UpdateImageContainer();
             };
         }

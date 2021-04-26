@@ -91,6 +91,14 @@
                           x:Name="menuHue"
                           Click="menuHue_Click"/>
 
+                <MenuItem Header="Saturation"
+                          x:Name="menuSaturation"
+                          Click="menuSaturation_Click"/>
+
+                <MenuItem Header="lightness"
+                          x:Name="menulightness"
+                          Click="menulightness_Click"/>
+
             </MenuItem>
             
             <MenuItem Header="Filters">

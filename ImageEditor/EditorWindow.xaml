@@ -9,7 +9,7 @@
         Title="EditorWindow" Height="800" Width="1000"
         AllowDrop="True"
         Drop="Window_Drop">
-    <Grid>
+    <Grid x:Name="mainGrid">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -19,8 +19,8 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*"/>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
 
         <Menu x:Name="mainMenu" Grid.ColumnSpan="3">
@@ -86,6 +86,11 @@
             </MenuItem>
 
             <MenuItem Header="Color">
+
+                <MenuItem Header="Hue"
+                          x:Name="menuHue"
+                          Click="menuHue_Click"/>
+
             </MenuItem>
             
             <MenuItem Header="Filters">
@@ -105,7 +110,8 @@
         </Image>
 
         <Grid Grid.Row="1"
-              Grid.Column="1">
+              Grid.Column="1"
+              x:Name="settingsGrid">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -117,6 +123,7 @@
                                  x:Name="colorPicker"/>
 
             <Frame Grid.Row="1"
+                   Grid.Column="1"
                    x:Name="optionsFrame">
                 
             </Frame>

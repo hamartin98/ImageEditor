@@ -110,7 +110,10 @@ namespace ImageEditor
         // Blur the image with the given radius
         public void BlurEffect(int radius)
         {
-            ImageEffects.BlurEffect(Data, radius);
+            if(Data != null)
+            {
+                Data = ImageEffects.BlurEffect(Data, radius);
+            }
         }
 
         // Apply histogram shrinking on the image
@@ -128,7 +131,10 @@ namespace ImageEditor
         // Increase image's hue by the given degree
         public void IncreaseHue(double degree)
         {
-            Data = ImageEffects.IncreaseHueBy(Data, degree);
+            if (Data != null)
+            {
+                Data = ImageEffects.IncreaseHueBy(Data, degree);
+            }
         }
 
         // Increase image's saturation by the given percentage

@@ -3,6 +3,8 @@ using Microsoft.Win32;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
+using ImageEditor.OptionFrames;
+using System.Windows.Controls;
 
 namespace ImageEditor
 {
@@ -215,11 +217,6 @@ namespace ImageEditor
 
         }
 
-        private void menuBlur_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void menuShrink_Click(object sender, RoutedEventArgs e)
         {
             if (imageData.IsDataSet)
@@ -240,7 +237,13 @@ namespace ImageEditor
 
         private void menuEdgeDetect_Click(object sender, RoutedEventArgs e)
         {
-
+            if (imageData.IsDataSet)
+            {
+                bool isColored = (bool)cbEdgeColored.IsChecked;
+                Bgr color = GetBgrColor();
+                imageData.EdgeDetection(true, color);
+                UpdateImageContainer();
+            }
         }
 
         // Load an user control into the optionsFrame to show different settings
@@ -263,6 +266,37 @@ namespace ImageEditor
         private void imgMain_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             magnifier.ZoomFactor = 0;
+        }
+
+        // Load the currently used user control into the grid
+        private void SetOptionsControl(UserControl control)
+        {
+            Grid.SetRow(control, 1);
+            settingsGrid.Children.Add(control);
+        }
+
+        private void menuBlur_Click(object sender, RoutedEventArgs e)
+        {
+            SliderControl sliderControl = new SliderControl("Blur options", 0, 100, 10, 0, 10);
+            SetOptionsControl(sliderControl);
+
+            sliderControl.ValueChanged += (double delta) =>
+            {
+                imageData.BlurEffect((int)delta);
+                UpdateImageContainer();
+            };
+        }
+
+        private void menuHue_Click(object sender, RoutedEventArgs e)
+        {
+            SliderControl sliderControl = new SliderControl("Hue options", -100, 100, 10, 0, 10);
+            SetOptionsControl(sliderControl);
+
+            sliderControl.ValueChanged += (double delta) =>
+            {
+                imageData.IncreaseHue(delta);
+                UpdateImageContainer();
+            };
         }
     }
 }

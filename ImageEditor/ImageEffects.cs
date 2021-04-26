@@ -8,9 +8,11 @@ namespace ImageEditor
     class ImageEffects
     {
         // Blur effect on the image with the given matrix radius
-        public static void BlurEffect(Mat original, int radius)
+        public static Mat BlurEffect(Mat original, int radius)
         {
-            CvInvoke.GaussianBlur(original, original, new Size(-1, -1), radius);
+            Mat result = original.Clone();
+            CvInvoke.GaussianBlur(original, result, new Size(-1, -1), radius);
+            return result;
         }
 
         // Returns the smallest and biggest lightness values from the given image

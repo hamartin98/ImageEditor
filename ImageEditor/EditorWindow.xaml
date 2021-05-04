@@ -109,11 +109,12 @@
             </MenuItem>
 
         </Menu>
-
+       
         <Image Grid.Row="1"
                Name="imgMain"
                MouseEnter="imgMain_MouseEnter"
-               MouseLeave="imgMain_MouseLeave">
+               MouseLeave="imgMain_MouseLeave"
+               Source="Images/placeholder.jpg">
         </Image>
 
         <Grid Grid.Row="1"

@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="ImageEditor.ImageContainer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ImageEditor"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Border ClipToBounds="True" x:Name="border">
+
+        <Image Source="Images/placeholder.jpg"
+                   x:Name="content"
+                   Height="430"
+                   MouseWheel="content_MouseWheel"
+                   MouseMove="content_MouseMove"
+                   RenderTransformOrigin="0.5,0.5"
+                   DragEnter="content_DragEnter">
+
+            <Image.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="1"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Image.RenderTransform>
+            <Image.LayoutTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="1"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Image.LayoutTransform>
+        </Image>
+    </Border>
+</UserControl>

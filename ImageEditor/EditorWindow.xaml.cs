@@ -27,6 +27,16 @@ namespace ImageEditor
         {
             InitializeComponent();
             imageData = new ImageData();
+
+            /*
+            Window window = new Window
+            {
+                //Content = new ImageContainer()
+                //Content = new DrawControl()
+            };
+
+            window.ShowDialog();
+            */
         }
 
         // Open an image from the computer and set the data of the imageData property

@@ -64,16 +64,17 @@ namespace ImageEditor
             if (imageData.IsDataSet)
             {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
+      
                 saveFileDialog.DefaultExt = imageData.Format;
                 saveFileDialog.AddExtension = true;
 
                 saveFileDialog.Title = "Save image";
                 saveFileDialog.Filter = fileDialogFilter;
-
+                
                 if (saveFileDialog.ShowDialog() == true)
                 {
                     string destPath = saveFileDialog.FileName;
-                    imageData.Save(destPath, saveQuality);
+                    imageData.Save(destPath);
                 }
             }
         }
@@ -137,6 +138,28 @@ namespace ImageEditor
         private void menuSave_Click(object sender, RoutedEventArgs e)
         {
             SaveImage();
+        }
+
+        private void menuSaveAs_Click(object sender, RoutedEventArgs e)
+        {
+            SaveAsSettings saveAsControl = new SaveAsSettings();
+            
+            Window window = new Window
+            {
+                Content = saveAsControl,
+                Width = 300,
+                Height = 400,
+                ResizeMode = ResizeMode.NoResize,
+                Owner = this
+            };
+
+            saveAsControl.SaveButtonClicked += (string fullPath, string format, int quality) =>
+            {
+                imageData.Save(fullPath, quality, format);
+                window.Close();
+            };
+
+            window.ShowDialog();
         }
 
         private void menuExit_Click(object sender, RoutedEventArgs e)
@@ -268,11 +291,6 @@ namespace ImageEditor
                 imageData.EdgeDetection(isColored, GetBgrColor());
                 UpdateImageContainer();
             };
-        }
-
-        private void menuSaveAs_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

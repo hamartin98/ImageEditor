@@ -29,8 +29,9 @@ namespace ImageEditor.OptionFrames
 
         private void btnDetect_Click(object sender, RoutedEventArgs e)
         {
-            string method = cboxMethod.ToString();
+            string method = cboxMethod.SelectedValue.ToString();
             bool isColored = (bool)cbIsColored.IsChecked;
+            MessageBox.Show(method);
 
             DetectButtonClicked(method, isColored);
         }

@@ -4,6 +4,7 @@ using Emgu.CV.Structure;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace ImageEditor
@@ -82,12 +83,23 @@ namespace ImageEditor
             return ImageDataConverter.MatToBitmapImage(Data);
         }
 
-        // Save the image to the specified location
-        public void Save(string path, int quality = 100)
+        // Save image without compression
+        public void Save(string fullPath)
         {
-            QualityMapper(ref quality);
-            KeyValuePair<ImwriteFlags, int> flag =  new KeyValuePair<ImwriteFlags, int>(saveFlags[Format], quality);
-            CvInvoke.Imwrite(path, Data, flag);
+            Save(fullPath, 100);
+        }
+
+        // Save the image to the specified location
+        public void Save(string fullPath, int quality = 100, string format = "")
+        {
+            if (Data != null)
+            {
+                Format = format == "" ? Format : format;
+                QualityMapper(ref quality);
+
+                KeyValuePair<ImwriteFlags, int> flag = new KeyValuePair<ImwriteFlags, int>(saveFlags[Format], quality);
+                CvInvoke.Imwrite(fullPath, Data, flag);
+            }
         }
 
         // Extract the format of the image from the path

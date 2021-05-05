@@ -153,6 +153,7 @@ namespace ImageEditor
             return image.Mat;
         }
 
+        // Keeps the selected color and convert every other color into grayscale
         public static Mat SplashEffect(Mat original, Bgr desColor, int treshold)
         {
             Image<Bgr, byte> result = original.ToImage<Bgr, byte>();
@@ -169,6 +170,33 @@ namespace ImageEditor
                     currColor = result[row, col];
 
                     if (!IsColorInRange(currColor, desColor, treshold))
+                    {
+                        grayColor = CalculateGrayColor(currColor);
+                        result[row, col] = grayColor;
+                    }
+                }
+            }
+
+            return result.Mat;
+        }
+
+        // Convert the selected color into grayscale and keep every other color
+        public static Mat ReverseSplashEffect(Mat original, Bgr desColor, int treshold)
+        {
+            Image<Bgr, byte> result = original.ToImage<Bgr, byte>();
+
+            int rows = result.Rows;
+            int cols = result.Cols;
+            Bgr currColor;
+            Bgr grayColor;
+
+            for (int row = 0; row < rows; ++row)
+            {
+                for (int col = 0; col < cols; ++col)
+                {
+                    currColor = result[row, col];
+
+                    if (IsColorInRange(currColor, desColor, treshold))
                     {
                         grayColor = CalculateGrayColor(currColor);
                         result[row, col] = grayColor;

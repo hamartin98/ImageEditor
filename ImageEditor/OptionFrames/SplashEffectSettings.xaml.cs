@@ -19,7 +19,8 @@ namespace ImageEditor.OptionFrames
     public partial class SplashEffectSettings : UserControl
     {
         public delegate void ButtonClickedEvent(int treshold);
-        public event ButtonClickedEvent ButtonClicked;
+        public event ButtonClickedEvent SplashButtonClicked;
+        public event ButtonClickedEvent ReverseSplashButtonClicked;
 
         public SplashEffectSettings()
         {
@@ -29,14 +30,28 @@ namespace ImageEditor.OptionFrames
         private void btnSplash_Click(object sender, RoutedEventArgs e)
         {
             int treshold = (int)sldTreshold.Value;
-            Notify(treshold);
+            NotifySplash(treshold);
         }
 
-        private void Notify(int treshold)
+        private void btnReverseSplash_Click(object sender, RoutedEventArgs e)
         {
-            if(ButtonClicked != null)
+            int treshold = (int)sldTreshold.Value;
+            NotifyReverseSplash(treshold);
+        }
+
+        private void NotifySplash(int treshold)
+        {
+            if(SplashButtonClicked != null)
             {
-                ButtonClicked(treshold);
+                SplashButtonClicked(treshold);
+            }
+        }
+
+        private void NotifyReverseSplash(int treshold)
+        {
+            if (ReverseSplashButtonClicked != null)
+            {
+                ReverseSplashButtonClicked(treshold);
             }
         }
     }

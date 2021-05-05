@@ -189,5 +189,13 @@ namespace ImageEditor
                 Data = ImageEffects.SplashEffect(Data, color, treshold);
             }
         }
+
+        public void ReverseSplashEffect(Bgr color, int treshold)
+        {
+            if (Data != null)
+            {
+                Data = ImageEffects.ReverseSplashEffect(Data, color, treshold);
+            }
+        }
     }
 }

@@ -325,12 +325,22 @@ namespace ImageEditor
             SplashEffectSettings splashEffectSettings = new SplashEffectSettings();
             SetOptionsControl(splashEffectSettings);
 
-            splashEffectSettings.ButtonClicked += (int treshold) =>
+            splashEffectSettings.SplashButtonClicked += (int treshold) =>
             {
                 if (imageData.IsDataSet)
                 {
                     Bgr color = GetBgrColor();
                     imageData.SplashEffect(color, 30);
+                    UpdateImageContainer();
+                }
+            };
+
+            splashEffectSettings.ReverseSplashButtonClicked += (int treshold) =>
+            {
+                if (imageData.IsDataSet)
+                {
+                    Bgr color = GetBgrColor();
+                    imageData.ReverseSplashEffect(color, 30);
                     UpdateImageContainer();
                 }
             };

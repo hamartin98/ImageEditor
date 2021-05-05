@@ -36,14 +36,25 @@
 
                 </DockPanel>
 
-                <Button x:Name="btnSplash"
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+
+                    <Button x:Name="btnSplash"
                         Click="btnSplash_Click"
                         Content="Splash"
                         HorizontalAlignment="Center"
                         Margin="10"/>
 
-            </StackPanel>
+                    <Button x:Name="btnReverseSplash"
+                        Click="btnReverseSplash_Click"
+                        Content="Reverse Splash"
+                        HorizontalAlignment="Center"
+                        Margin="10"/>
 
+                </StackPanel>
+
+            </StackPanel>
+                
         </Border>
     </StackPanel>
 </UserControl>

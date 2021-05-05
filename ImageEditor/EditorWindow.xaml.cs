@@ -28,6 +28,7 @@ namespace ImageEditor
             InitializeComponent();
             imageData = new ImageData();
 
+            InitializeMagnifierOptions();
             /*
             Window window = new Window
             {
@@ -212,12 +213,14 @@ namespace ImageEditor
 
         private void imgMain_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            magnifier.Visibility = Visibility.Visible;
             magnifier.ZoomFactor = 0.5;
         }
 
         private void imgMain_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            magnifier.ZoomFactor = 0;
+            magnifier.Visibility = Visibility.Hidden;
+            //magnifier.ZoomFactor = 0;
         }
 
         // Load the currently used user control into the grid
@@ -290,6 +293,30 @@ namespace ImageEditor
             {
                 imageData.EdgeDetection(isColored, GetBgrColor());
                 UpdateImageContainer();
+            };
+        }
+
+        // Add magnifier options to the ui and connect it to apply changes
+        private void InitializeMagnifierOptions()
+        {
+            MagnifierOptions magnifierOptions = new MagnifierOptions();
+            stackMagnifierOptions.Children.Add(magnifierOptions);
+
+            magnifierOptions.SettingsChanged += () =>
+            {
+                string type = magnifierOptions.SelectedType;
+
+                if(type == "Rectangle")
+                {
+                    magnifier.FrameType = Xceed.Wpf.Toolkit.FrameType.Rectangle;
+                    magnifier.Width = magnifierOptions.CurrentSize.Width;
+                    magnifier.Height = magnifierOptions.CurrentSize.Height;
+                }
+                else
+                {
+                    magnifier.FrameType = Xceed.Wpf.Toolkit.FrameType.Circle;
+                    magnifier.Radius = magnifierOptions.CurrentRadius;
+                }
             };
         }
     }

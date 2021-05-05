@@ -154,7 +154,7 @@ namespace ImageEditor
         }
 
         // Keeps the selected color and convert every other color into grayscale
-        public static Mat SplashEffect(Mat original, Bgr desColor, int treshold)
+        public static Mat SplashEffect(Mat original, Bgr desColor, int treshold, bool isReverse = false)
         {
             Image<Bgr, byte> result = original.ToImage<Bgr, byte>();
             
@@ -169,7 +169,9 @@ namespace ImageEditor
                 {
                     currColor = result[row, col];
 
-                    if (!IsColorInRange(currColor, desColor, treshold))
+                    bool inRange = IsColorInRange(currColor, desColor, treshold);
+
+                    if ((!inRange && !isReverse) || (inRange && isReverse))
                     {
                         grayColor = CalculateGrayColor(currColor);
                         result[row, col] = grayColor;
@@ -183,35 +185,16 @@ namespace ImageEditor
         // Convert the selected color into grayscale and keep every other color
         public static Mat ReverseSplashEffect(Mat original, Bgr desColor, int treshold)
         {
-            Image<Bgr, byte> result = original.ToImage<Bgr, byte>();
-
-            int rows = result.Rows;
-            int cols = result.Cols;
-            Bgr currColor;
-            Bgr grayColor;
-
-            for (int row = 0; row < rows; ++row)
-            {
-                for (int col = 0; col < cols; ++col)
-                {
-                    currColor = result[row, col];
-
-                    if (IsColorInRange(currColor, desColor, treshold))
-                    {
-                        grayColor = CalculateGrayColor(currColor);
-                        result[row, col] = grayColor;
-                    }
-                }
-            }
-
-            return result.Mat;
+            return SplashEffect(original, desColor, treshold, true);
         }
 
+        // Returns true if the given color is inside the given treshold value
         private static bool IsChannelInRange(double colorChannel, double desColorChannel, int treshold)
         {
             return Math.Abs(desColorChannel - colorChannel) <= treshold;
         }
 
+        // Returns true if every channel value is in the given treshold value
         private static bool IsColorInRange(Bgr currColor, Bgr desColor, int treshold)
         {
             return IsChannelInRange(currColor.Blue, desColor.Blue, treshold) && 
@@ -219,6 +202,7 @@ namespace ImageEditor
                    IsChannelInRange(currColor.Red, desColor.Red, treshold);  
         }
 
+        // Calcualte a grayscale value from the given color
         private static Bgr CalculateGrayColor(Bgr color)
         {
             int value = (int)(color.Blue * 0.11 + color.Green * 0.59 + color.Red * 0.3);

@@ -23,10 +23,6 @@
                 <DockPanel Margin="10"
                            VerticalAlignment="Center">
 
-                    <TextBlock Text="{ Binding ElementName=sldTreshold, Path = Value}"
-                               DockPanel.Dock="Right"
-                               VerticalAlignment="Center"/>
-
                     <Slider x:Name="sldTreshold"
                             Margin="10"
                             TickPlacement="BottomRight"

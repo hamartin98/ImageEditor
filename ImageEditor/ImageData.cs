@@ -181,5 +181,13 @@ namespace ImageEditor
                 Data = Convolution.ParallelEdgeDetection(Data, isColored, color).Mat;
             }
         }
+
+        public void SplashEffect(Bgr color, int treshold)
+        {
+            if(Data != null)
+            {
+                Data = ImageEffects.SplashEffect(Data, color, treshold);
+            }
+        }
     }
 }

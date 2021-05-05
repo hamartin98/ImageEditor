@@ -81,7 +81,11 @@
                 <MenuItem Header="Stretch"
                           x:Name="menuStretch"
                           Click="menuStretch_Click"/>
-                
+
+                <MenuItem Header="Splash Effect"
+                          x:Name="menuSplash"
+                          Click="menuSplash_Click"/>
+
             </MenuItem>
 
             <MenuItem Header="Color">

@@ -319,5 +319,21 @@ namespace ImageEditor
                 }
             };
         }
+
+        private void menuSplash_Click(object sender, RoutedEventArgs e)
+        {
+            SplashEffectSettings splashEffectSettings = new SplashEffectSettings();
+            SetOptionsControl(splashEffectSettings);
+
+            splashEffectSettings.ButtonClicked += (int treshold) =>
+            {
+                if (imageData.IsDataSet)
+                {
+                    Bgr color = GetBgrColor();
+                    imageData.SplashEffect(color, 30);
+                    UpdateImageContainer();
+                }
+            };
+        }
     }
 }

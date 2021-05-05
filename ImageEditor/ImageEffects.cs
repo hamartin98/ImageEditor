@@ -152,5 +152,49 @@ namespace ImageEditor
 
             return image.Mat;
         }
+
+        public static Mat SplashEffect(Mat original, Bgr desColor, int treshold)
+        {
+            Image<Bgr, byte> result = original.ToImage<Bgr, byte>();
+            
+            int rows = result.Rows;
+            int cols = result.Cols;
+            Bgr currColor;
+            Bgr grayColor;
+
+            for (int row = 0; row < rows; ++row)
+            {
+                for (int col = 0; col < cols; ++col)
+                {
+                    currColor = result[row, col];
+
+                    if (!IsColorInRange(currColor, desColor, treshold))
+                    {
+                        grayColor = CalculateGrayColor(currColor);
+                        result[row, col] = grayColor;
+                    }
+                }
+            }
+
+            return result.Mat;
+        }
+
+        private static bool IsChannelInRange(double colorChannel, double desColorChannel, int treshold)
+        {
+            return Math.Abs(desColorChannel - colorChannel) <= treshold;
+        }
+
+        private static bool IsColorInRange(Bgr currColor, Bgr desColor, int treshold)
+        {
+            return IsChannelInRange(currColor.Blue, desColor.Blue, treshold) && 
+                   IsChannelInRange(currColor.Green, desColor.Green, treshold) &&
+                   IsChannelInRange(currColor.Red, desColor.Red, treshold);  
+        }
+
+        private static Bgr CalculateGrayColor(Bgr color)
+        {
+            int value = (int)(color.Blue * 0.11 + color.Green * 0.59 + color.Red * 0.3);
+            return new Bgr(value, value, value);
+        }
     }
 }
